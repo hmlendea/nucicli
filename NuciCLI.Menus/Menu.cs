@@ -68,9 +68,8 @@ namespace NuciCLI.Menus
             TitleColour = ConsoleColor.Green;
             TitleDecorationColour = ConsoleColor.Yellow;
             PromptColour = ConsoleColor.White;
-
             AddCommand("exit", "Exit this menu", Exit);
-            AddCommand("print", "Print the command list", PrintCommandList);
+            AddCommand("help", "Prints the command list", PrintCommandList);
         }
 
         /// <summary>
@@ -174,11 +173,14 @@ namespace NuciCLI.Menus
         /// </summary>
         void PrintCommandList()
         {
-            int commandColumnWidth = commandTexts.Keys.Aggregate
-                ("", (max, cur) => max.Length > cur.Length ? max : cur).Length + 4;
+            int commandColumnWidth = commandTexts.Keys
+                .Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur)
+                .Length + 4;
 
             foreach (KeyValuePair<string, string> entry in commandTexts)
+            {
                 Console.WriteLine("{0} {1}", entry.Key.PadRight(commandColumnWidth), entry.Value);
+            }
         }
 
         /// <summary>
@@ -199,12 +201,14 @@ namespace NuciCLI.Menus
         void HandleCommand()
         {
             foreach (string command in commandActions.Keys)
+            {
                 if (cmd == command)
                 {
                     commandActions[cmd]();
 
                     return;
                 }
+            }
 
             Console.WriteLine("Invalid command");
         }
