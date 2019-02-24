@@ -12,8 +12,7 @@ namespace NuciCLI.Menus
         string cmd;
         bool isRunning;
 
-        readonly Dictionary<string, string> commandTexts;
-        readonly Dictionary<string, Action> commandActions;
+        readonly Dictionary<string, Command> commands;
 
         /// <summary>
         /// Gets or sets the title colour.
@@ -57,17 +56,19 @@ namespace NuciCLI.Menus
         /// <value>The prompt.</value>
         public string Prompt { get; set; } = "> ";
 
+        public bool AreStatisticsEnabled { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Menu"/> class.
         /// </summary>
         public Menu()
         {
-            commandTexts = new Dictionary<string, string>();
-            commandActions = new Dictionary<string, Action>();
+            commands = new Dictionary<string, Command>();
 
             TitleColour = ConsoleColor.Green;
             TitleDecorationColour = ConsoleColor.Yellow;
             PromptColour = ConsoleColor.White;
+
             AddCommand("exit", "Exit this menu", Exit);
             AddCommand("help", "Prints the command list", PrintCommandList);
         }
@@ -127,13 +128,14 @@ namespace NuciCLI.Menus
         /// <summary>
         /// Adds the command.
         /// </summary>
-        /// <param name="command">Command.</param>
-        /// <param name="text">Text.</param>
-        /// <param name="action">Action.</param>
-        public void AddCommand(string command, string text, Action action)
+        /// <param name="name">The name.</param>
+        /// <param name="description">The description.</param>
+        /// <param name="action">The action.</param>
+        public void AddCommand(string name, string description, Action action)
         {
-            commandTexts.Add(command, text);
-            commandActions.Add(command, action);
+            Command command = new Command(name, description, action);
+            
+            commands.Add(command.Name, command);
         }
 
         /// <summary>
@@ -173,13 +175,13 @@ namespace NuciCLI.Menus
         /// </summary>
         void PrintCommandList()
         {
-            int commandColumnWidth = commandTexts.Keys
+            int commandColumnWidth = commands.Keys
                 .Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur)
                 .Length + 4;
 
-            foreach (KeyValuePair<string, string> entry in commandTexts)
+            foreach (Command command in commands.Values)
             {
-                Console.WriteLine("{0} {1}", entry.Key.PadRight(commandColumnWidth), entry.Value);
+                Console.WriteLine("{0} {1}", command.Name.PadRight(commandColumnWidth), command.Description);
             }
         }
 
@@ -200,17 +202,17 @@ namespace NuciCLI.Menus
         /// </summary>
         void HandleCommand()
         {
-            foreach (string command in commandActions.Keys)
+            if (!commands.ContainsKey(cmd))
             {
-                if (cmd == command)
-                {
-                    commandActions[cmd]();
-
-                    return;
-                }
+                Console.WriteLine("Invalid command");
             }
 
-            Console.WriteLine("Invalid command");
+            CommandResult result = commands[cmd].Execute();
+
+            if (AreStatisticsEnabled)
+            {
+                PrintCommandResults(result);
+            }
         }
 
         /// <summary>
@@ -219,6 +221,41 @@ namespace NuciCLI.Menus
         void Exit()
         {
             isRunning = false;
+        }
+
+        void PrintCommandResults(CommandResult result)
+        {
+            Console.Write("Command finished ");
+            
+            if (result.WasSuccessful)
+            {
+                ConsoleEx.WriteColoured("sucessfully", ConsoleColor.Green);
+            }
+            else
+            {
+                ConsoleEx.WriteColoured("unsucessfully", ConsoleColor.Red);
+            }
+            
+            Console.Write(" in ");
+
+            if (result.Duration.TotalSeconds < 1)
+            {
+                Console.WriteLine($"{result.Duration.TotalMilliseconds}ms");
+            }
+            else if (result.Duration.TotalMinutes < 1)
+            {
+                Console.WriteLine($"{result.Duration.TotalSeconds}s");
+            }
+            else
+            {
+                Console.WriteLine($"{result.Duration.TotalMinutes}m");
+            }
+
+            if (!result.WasSuccessful)
+            {
+                Console.WriteLine($"Error message: {result.Exception.Message}");
+                throw result.Exception;
+            }
         }
     }
 }
