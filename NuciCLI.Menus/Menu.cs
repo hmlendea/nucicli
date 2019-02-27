@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using NuciCLI;
+using NuciCLI.Extensions;
 
 namespace NuciCLI.Menus
 {
@@ -41,16 +42,10 @@ namespace NuciCLI.Menus
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets or sets the title decoration on the left.
+        /// Gets or sets the title decoration.
         /// </summary>
-        /// <value>The title decoration on the left.</value>
-        public string TitleDecorationLeft { get; set; } = "-==< ";
-
-        /// <summary>
-        /// Gets or sets the title decoration on the right.
-        /// </summary>
-        /// <value>The title decoration on the right.</value>
-        public string TitleDecorationRight { get; set; } = " >==-";
+        /// <value>The title decoration.</value>
+        public string TitleDecoration { get; set; } = "-==< ";
 
         /// <summary>
         /// Gets or sets the prompt.
@@ -154,9 +149,9 @@ namespace NuciCLI.Menus
         /// </summary>
         void PrintTitle()
         {
-            NuciConsole.Write(TitleDecorationLeft, TitleDecorationColour);
+            NuciConsole.Write(TitleDecoration, TitleDecorationColour);
             NuciConsole.Write(Title, TitleColour);
-            NuciConsole.Write(TitleDecorationRight, TitleDecorationColour);
+            NuciConsole.Write(TitleDecoration.Reverse(), TitleDecorationColour);
 
             NuciConsole.WriteLine();
         }
@@ -166,9 +161,7 @@ namespace NuciCLI.Menus
         /// </summary>
         void PrintCommandList()
         {
-            int commandColumnWidth = commands.Keys
-                .Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur)
-                .Length + 4;
+            int commandColumnWidth = commands.Keys.Max(x => x.Length) + 4;
 
             foreach (Command command in commands.Values)
             {
@@ -246,7 +239,7 @@ namespace NuciCLI.Menus
 
             if (!result.WasSuccessful)
             {
-                NuciConsole.WriteLine($"Error message: {result.Exception.Message}");
+                NuciConsole.WriteLine($"Error message: {result.Exception.Message}", Colour.Red);
                 throw result.Exception;
             }
         }
