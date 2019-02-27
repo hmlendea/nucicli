@@ -98,6 +98,8 @@ namespace NuciCLI
             {
                 Console.BackgroundColor = (ConsoleColor)backgroundColour.ConsoleColour;
             }
+
+            Console.Write(text, foregroundColour, backgroundColour);
             
             Console.ForegroundColor = oldForegroundColour;
             Console.BackgroundColor = oldBackgroundColour;
