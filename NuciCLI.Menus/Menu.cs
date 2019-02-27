@@ -198,7 +198,8 @@ namespace NuciCLI.Menus
         {
             if (!commands.ContainsKey(cmd))
             {
-                NuciConsole.WriteLine("Unknown command");
+                NuciConsole.WriteLine("Unknown command", Colour.Red);
+                return;
             }
 
             CommandResult result = commands[cmd].Execute();
