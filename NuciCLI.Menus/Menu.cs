@@ -87,21 +87,29 @@ namespace NuciCLI.Menus
         /// <param name="prompt">Prompt.</param>
         public bool InputPermission(string prompt)
         {
-            NuciConsole.Write(prompt);
-            NuciConsole.Write(" (y/N) ");
-
             while (true)
             {
-                ConsoleKeyInfo c = NuciConsole.ReadKey();
+                string inputValue = NuciConsole.ReadLine($"{prompt} (y/N) ");
 
-                switch (c.Key)
+                if (string.IsNullOrWhiteSpace(inputValue))
                 {
-                    case ConsoleKey.Y:
+                    NuciConsole.WriteLine();
+                    return true;
+                }
+                else if (inputValue.Length > 1)
+                {
+                    continue;
+                }
+
+                switch (inputValue[0])
+                {
+                    case 'y':
+                    case 'Y':
                         NuciConsole.WriteLine();
                         return true;
 
-                    case ConsoleKey.N:
-                    case ConsoleKey.Enter:
+                    case 'n':
+                    case 'N':
                         NuciConsole.WriteLine();
                         return false;
 
