@@ -6,9 +6,9 @@
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <RootNamespace>NuciCLI</RootNamespace>
     </PropertyGroup>
-
+    
     <ItemGroup>
-        <PackageReference Include="NuciCLI" Version="1.0.0" />
+      <ProjectReference Include="..\NuciCLI\NuciCLI.csproj" />
     </ItemGroup>
     
 </Project>

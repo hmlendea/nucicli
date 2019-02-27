@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using NuciCLI;
+
 namespace NuciCLI.Menus
 {
     /// <summary>
@@ -18,19 +20,19 @@ namespace NuciCLI.Menus
         /// Gets or sets the title colour.
         /// </summary>
         /// <value>The title colour.</value>
-        public ConsoleColor TitleColour { get; set; }
+        public Colour TitleColour { get; set; }
 
         /// <summary>
         /// Gets or sets the title decoration colour.
         /// </summary>
         /// <value>The title decoration colour.</value>
-        public ConsoleColor TitleDecorationColour { get; set; }
+        public Colour TitleDecorationColour { get; set; }
 
         /// <summary>
         /// Gets or sets the prompt colour.
         /// </summary>
         /// <value>The prompt colour.</value>
-        public ConsoleColor PromptColour { get; set; }
+        public Colour PromptColour { get; set; }
 
         /// <summary>
         /// Gets or sets the title.
@@ -65,9 +67,9 @@ namespace NuciCLI.Menus
         {
             commands = new Dictionary<string, Command>();
 
-            TitleColour = ConsoleColor.Green;
-            TitleDecorationColour = ConsoleColor.Yellow;
-            PromptColour = ConsoleColor.White;
+            TitleColour = Colour.Green;
+            TitleDecorationColour = Colour.Yellow;
+            PromptColour = Colour.White;
 
             AddCommand("exit", "Exit this menu", Exit);
             AddCommand("help", "Prints the command list", PrintCommandList);
@@ -84,42 +86,32 @@ namespace NuciCLI.Menus
         }
 
         /// <summary>
-        /// Input the specified prompt.
-        /// </summary>
-        /// <param name="prompt">Prompt.</param>
-        public virtual string Input(string prompt)
-        {
-            Console.Write(prompt);
-            return Console.ReadLine();
-        }
-
-        /// <summary>
         /// Inputs the permission.
         /// </summary>
         /// <returns><c>true</c>, if permission was input, <c>false</c> otherwise.</returns>
         /// <param name="prompt">Prompt.</param>
         public bool InputPermission(string prompt)
         {
-            Console.Write(prompt);
-            Console.Write(" (y/N) ");
+            NuciConsole.Write(prompt);
+            NuciConsole.Write(" (y/N) ");
 
             while (true)
             {
-                ConsoleKeyInfo c = Console.ReadKey();
+                ConsoleKeyInfo c = NuciConsole.ReadKey();
 
                 switch (c.Key)
                 {
                     case ConsoleKey.Y:
-                        Console.WriteLine();
+                        NuciConsole.WriteLine();
                         return true;
 
                     case ConsoleKey.N:
                     case ConsoleKey.Enter:
-                        Console.WriteLine();
+                        NuciConsole.WriteLine();
                         return false;
 
                     default:
-                        Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+                        NuciConsole.CursorX -= 1;
                         break;
                 }
             }
@@ -150,7 +142,7 @@ namespace NuciCLI.Menus
 
             while (isRunning)
             {
-                Console.WriteLine();
+                NuciConsole.WriteLine();
 
                 GetCommand();
                 HandleCommand();
@@ -162,12 +154,11 @@ namespace NuciCLI.Menus
         /// </summary>
         void PrintTitle()
         {
-            ConsoleEx.WriteColoured(TitleDecorationLeft, TitleDecorationColour);
-            ConsoleEx.WriteColoured(Title, TitleColour);
-            ConsoleEx.WriteColoured(TitleDecorationRight, TitleDecorationColour);
-            Console.ResetColor(); // TODO: Proper colour fix
+            NuciConsole.Write(TitleDecorationLeft, TitleDecorationColour);
+            NuciConsole.Write(Title, TitleColour);
+            NuciConsole.Write(TitleDecorationRight, TitleDecorationColour);
 
-            Console.WriteLine();
+            NuciConsole.WriteLine();
         }
 
         /// <summary>
@@ -181,7 +172,9 @@ namespace NuciCLI.Menus
 
             foreach (Command command in commands.Values)
             {
-                Console.WriteLine("{0} {1}", command.Name.PadRight(commandColumnWidth), command.Description);
+                string formattedName = command.Name.PadRight(commandColumnWidth);
+
+                NuciConsole.WriteLine($"{formattedName} {command.Description}");
             }
         }
 
@@ -191,9 +184,9 @@ namespace NuciCLI.Menus
         /// <returns>The command.</returns>
         string GetCommand()
         {
-            ConsoleEx.WriteColoured(Prompt, PromptColour);
+            NuciConsole.Write(Prompt, PromptColour);
 
-            cmd = Console.ReadLine();
+            cmd = NuciConsole.ReadLine();
             return cmd;
         }
 
@@ -204,7 +197,7 @@ namespace NuciCLI.Menus
         {
             if (!commands.ContainsKey(cmd))
             {
-                Console.WriteLine("Invalid command");
+                NuciConsole.WriteLine("Unknown command");
             }
 
             CommandResult result = commands[cmd].Execute();
@@ -225,35 +218,35 @@ namespace NuciCLI.Menus
 
         void PrintCommandResults(CommandResult result)
         {
-            Console.Write("Command finished ");
+            NuciConsole.Write("Command finished ");
             
             if (result.WasSuccessful)
             {
-                ConsoleEx.WriteColoured("sucessfully", ConsoleColor.Green);
+                NuciConsole.Write("sucessfully", Colour.Green);
             }
             else
             {
-                ConsoleEx.WriteColoured("unsucessfully", ConsoleColor.Red);
+                NuciConsole.Write("unsucessfully", Colour.Red);
             }
             
-            Console.Write(" in ");
+            NuciConsole.Write(" in ");
 
             if (result.Duration.TotalSeconds < 1)
             {
-                Console.WriteLine($"{result.Duration.TotalMilliseconds}ms");
+                NuciConsole.WriteLine($"{result.Duration.TotalMilliseconds}ms");
             }
             else if (result.Duration.TotalMinutes < 1)
             {
-                Console.WriteLine($"{result.Duration.TotalSeconds}s");
+                NuciConsole.WriteLine($"{result.Duration.TotalSeconds}s");
             }
             else
             {
-                Console.WriteLine($"{result.Duration.TotalMinutes}m");
+                NuciConsole.WriteLine($"{result.Duration.TotalMinutes}m");
             }
 
             if (!result.WasSuccessful)
             {
-                Console.WriteLine($"Error message: {result.Exception.Message}");
+                NuciConsole.WriteLine($"Error message: {result.Exception.Message}");
                 throw result.Exception;
             }
         }
