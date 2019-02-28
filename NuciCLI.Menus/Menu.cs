@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using NuciCLI;
 using NuciCLI.Extensions;
 
 namespace NuciCLI.Menus
@@ -110,27 +109,16 @@ namespace NuciCLI.Menus
         {
             while (true)
             {
-                string inputValue = NuciConsole.ReadLine($"{prompt} (y/N) ");
+                ConsoleKeyInfo inputValue = NuciConsole.ReadKey($"{prompt} (y/N) ");
 
-                if (string.IsNullOrWhiteSpace(inputValue))
+                switch (inputValue.Key)
                 {
-                    NuciConsole.WriteLine();
-                    return true;
-                }
-                else if (inputValue.Length > 1)
-                {
-                    continue;
-                }
-
-                switch (inputValue[0])
-                {
-                    case 'y':
-                    case 'Y':
+                    case ConsoleKey.Y:
                         NuciConsole.WriteLine();
                         return true;
 
-                    case 'n':
-                    case 'N':
+                    case ConsoleKey.N:
+                    case ConsoleKey.Enter:
                         NuciConsole.WriteLine();
                         return false;
 
@@ -218,6 +206,8 @@ namespace NuciCLI.Menus
             {
                 PrintCommandResults(result);
             }
+
+            Console.WriteLine();
         }
 
         /// <summary>
@@ -230,6 +220,7 @@ namespace NuciCLI.Menus
 
         void PrintCommandResults(CommandResult result)
         {
+            NuciConsole.WriteLine();
             NuciConsole.Write("Command finished ");
             
             if (result.WasSuccessful)
