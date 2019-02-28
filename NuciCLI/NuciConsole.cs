@@ -25,6 +25,24 @@ namespace NuciCLI
             }
         }
 
+        public static int Width
+        {
+            get => Console.BufferWidth;
+            set
+            {
+                Console.SetBufferSize(value, Height);
+            }
+        }
+
+        public static int Height
+        {
+            get => Console.BufferHeight;
+            set
+            {
+                Console.SetBufferSize(Width, value);
+            }
+        }
+
         public static ConsoleKeyInfo ReadKey() => ReadKey(string.Empty);
         public static ConsoleKeyInfo ReadKey(string prompt) => ReadKey(prompt, Colour.Default);
         public static ConsoleKeyInfo ReadKey(string prompt, Colour foregroundColour) => ReadKey(prompt, foregroundColour, Colour.Default);
