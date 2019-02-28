@@ -10,7 +10,7 @@ namespace NuciCLI.Menus
     /// <summary>
     /// Command-line menu.
     /// </summary>
-    public class Menu
+    public class Menu : IDisposable
     {
         readonly Dictionary<string, Command> commands;
 
@@ -77,6 +77,28 @@ namespace NuciCLI.Menus
             : this()
         {
             Title = title;
+        }
+
+        ~Menu()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposing)
+            {
+                return;
+            }
+            
+            commands.Clear();
+            Exit();
         }
 
         /// <summary>
