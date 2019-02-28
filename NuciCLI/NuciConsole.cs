@@ -25,7 +25,17 @@ namespace NuciCLI
             }
         }
 
-        public static ConsoleKeyInfo ReadKey() => Console.ReadKey();
+        public static ConsoleKeyInfo ReadKey() => ReadKey(string.Empty);
+        public static ConsoleKeyInfo ReadKey(string prompt) => ReadKey(prompt, Colour.Default);
+        public static ConsoleKeyInfo ReadKey(string prompt, Colour foregroundColour) => ReadKey(prompt, foregroundColour, Colour.Default);
+        public static ConsoleKeyInfo ReadKey(string prompt, Colour foregroundColour, Colour backgroundColour)
+        {
+            NuciConsole.Write(prompt);
+
+            ConsoleKeyInfo inputValue = Console.ReadKey();
+
+            return inputValue;
+        }
         
         public static string ReadLine() => NuciConsole.ReadLine(string.Empty);
         public static string ReadLine(string prompt) => ReadLine(prompt, Colour.Default);
