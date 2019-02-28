@@ -12,10 +12,9 @@ namespace NuciCLI.Menus
     /// </summary>
     public class Menu
     {
-        string cmd;
-        bool isRunning;
-
         readonly Dictionary<string, Command> commands;
+
+        public bool IsRunning { get; private set; }
 
         /// <summary>
         /// Gets or sets the title colour.
@@ -138,17 +137,18 @@ namespace NuciCLI.Menus
         /// </summary>
         public void Run()
         {
-            isRunning = true;
+            IsRunning = true;
 
             PrintTitle();
             PrintCommandList();
 
-            while (isRunning)
+            while (IsRunning)
             {
                 NuciConsole.WriteLine();
 
-                GetCommand();
-                HandleCommand();
+                string cmd = NuciConsole.ReadLine(Prompt, PromptColour);
+                
+                HandleCommand(cmd);
             }
         }
 
@@ -180,21 +180,9 @@ namespace NuciCLI.Menus
         }
 
         /// <summary>
-        /// Gets the command.
-        /// </summary>
-        /// <returns>The command.</returns>
-        string GetCommand()
-        {
-            NuciConsole.Write(Prompt, PromptColour);
-
-            cmd = NuciConsole.ReadLine();
-            return cmd;
-        }
-
-        /// <summary>
         /// Handles the command.
         /// </summary>
-        void HandleCommand()
+        void HandleCommand(string cmd)
         {
             if (!commands.ContainsKey(cmd))
             {
@@ -215,7 +203,7 @@ namespace NuciCLI.Menus
         /// </summary>
         void Exit()
         {
-            isRunning = false;
+            IsRunning = false;
         }
 
         void PrintCommandResults(CommandResult result)
