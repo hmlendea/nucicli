@@ -141,36 +141,7 @@ namespace NuciCLI.Menus
         {
             IsRunning = false;
         }
-
-        /// <summary>
-        /// Inputs the permission.
-        /// </summary>
-        /// <returns><c>true</c>, if permission was input, <c>false</c> otherwise.</returns>
-        /// <param name="prompt">Prompt.</param>
-        public bool InputPermission(string prompt)
-        {
-            while (true)
-            {
-                ConsoleKeyInfo inputValue = NuciConsole.ReadKey($"{prompt} (y/N) ");
-
-                switch (inputValue.Key)
-                {
-                    case ConsoleKey.Y:
-                        NuciConsole.WriteLine();
-                        return true;
-
-                    case ConsoleKey.N:
-                    case ConsoleKey.Enter:
-                        NuciConsole.WriteLine();
-                        return false;
-
-                    default:
-                        NuciConsole.CursorX -= 1;
-                        break;
-                }
-            }
-        }
-
+        
         /// <summary>
         /// Adds the command.
         /// </summary>

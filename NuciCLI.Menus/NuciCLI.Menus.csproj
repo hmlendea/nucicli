@@ -2,13 +2,13 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
-        <Version>1.1.1</Version>
+        <Version>1.2.0</Version>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <RootNamespace>NuciCLI.Menus</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="NuciCLI" Version="1.1.1.1" />
+      <PackageReference Include="NuciCLI" Version="1.1.2" />
     </ItemGroup>
     
 </Project>
