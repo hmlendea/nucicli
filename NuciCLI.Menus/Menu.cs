@@ -13,6 +13,12 @@ namespace NuciCLI.Menus
     {
         readonly Dictionary<string, Command> commands;
 
+        public string Id { get; set; }
+
+        public string ParentId { get; set; }
+
+        public IList<string> ChildrenIds { get; set; }
+
         public bool IsRunning { get; private set; }
 
         /// <summary>
@@ -53,18 +59,23 @@ namespace NuciCLI.Menus
 
         public bool AreStatisticsEnabled { get; set; }
 
+        bool disposed;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Menu"/> class.
         /// </summary>
         public Menu()
         {
             commands = new Dictionary<string, Command>();
+            
+            Id = Guid.NewGuid().ToString();
+            ChildrenIds = new List<string>();
 
             TitleColour = Colour.Green;
             TitleDecorationColour = Colour.Yellow;
             PromptColour = Colour.White;
 
-            AddCommand("exit", "Exit this menu", Exit);
+            AddCommand("exit", "Exit this menu", Dispose);
             AddCommand("help", "Prints the command list", PrintCommandList);
         }
 
@@ -91,13 +102,44 @@ namespace NuciCLI.Menus
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposing)
+            if (disposed || !disposing)
             {
                 return;
             }
-            
+
             commands.Clear();
-            Exit();
+            IsRunning = false;
+
+            disposed = true;
+
+            foreach (string childId in ChildrenIds)
+            {
+                MenuManager.Instance.CloseMenu(childId);
+            }
+            
+            MenuManager.Instance.CloseMenu(Id);
+        }
+
+        public void Start()
+        {
+            IsRunning = true;
+
+            PrintTitle();
+            PrintCommandList();
+
+            while (IsRunning)
+            {
+                NuciConsole.WriteLine();
+
+                string cmd = NuciConsole.ReadLine(Prompt, PromptColour);
+                
+                HandleCommand(cmd);
+            }
+        }
+
+        public void Stop()
+        {
+            IsRunning = false;
         }
 
         /// <summary>
@@ -140,26 +182,6 @@ namespace NuciCLI.Menus
             Command command = new Command(name, description, action);
             
             commands.Add(command.Name, command);
-        }
-
-        /// <summary>
-        /// Runs this menu.
-        /// </summary>
-        public void Run()
-        {
-            IsRunning = true;
-
-            PrintTitle();
-            PrintCommandList();
-
-            while (IsRunning)
-            {
-                NuciConsole.WriteLine();
-
-                string cmd = NuciConsole.ReadLine(Prompt, PromptColour);
-                
-                HandleCommand(cmd);
-            }
         }
 
         /// <summary>
@@ -207,15 +229,7 @@ namespace NuciCLI.Menus
                 PrintCommandResults(result);
             }
 
-            Console.WriteLine();
-        }
-
-        /// <summary>
-        /// Exit this menu.
-        /// </summary>
-        void Exit()
-        {
-            IsRunning = false;
+            NuciConsole.WriteLine();
         }
 
         void PrintCommandResults(CommandResult result)
