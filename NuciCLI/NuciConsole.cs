@@ -67,6 +67,59 @@ namespace NuciCLI
             return inputValue;
         }
 
+        public static bool ReadPermission(string prompt)
+            => ReadPermission(prompt, false);
+
+        public static bool ReadPermission(string prompt, bool defaultValue)
+            => ReadPermission(prompt, defaultValue, Colour.Default);
+
+        public static bool ReadPermission(string prompt, Colour foregroundColour)
+            => ReadPermission(prompt, false, foregroundColour);
+
+        public static bool ReadPermission(string prompt, bool defaultValue, Colour foregroundColour)
+            => ReadPermission(prompt, defaultValue, foregroundColour, Colour.Default);
+
+        public static bool ReadPermission(string prompt, Colour foregroundColour, Colour backgroundColour)
+            => ReadPermission(prompt, false, foregroundColour, backgroundColour);
+
+        public static bool ReadPermission(
+            string prompt,
+            bool defaultValue,
+            Colour foregroundColour,
+            Colour backgroundColour)
+        {
+            while (true)
+            {
+                string yesNo = "y/N";
+
+                if (defaultValue)
+                {
+                    yesNo = "Y/n";
+                }
+
+                ConsoleKeyInfo inputValue = ReadKey($"{prompt} ({yesNo}) ");
+
+                switch (inputValue.Key)
+                {
+                    case ConsoleKey.Y:
+                        NuciConsole.WriteLine();
+                        return true;
+
+                    case ConsoleKey.N:
+                        NuciConsole.WriteLine();
+                        return false;
+                    
+                    case ConsoleKey.Enter:
+                        NuciConsole.WriteLine();
+                        return defaultValue;
+
+                    default:
+                        NuciConsole.CursorX -= 1;
+                        break;
+                }
+            }
+        }
+
         /// <summary>
         /// Writes an empty line to the standard output.
         /// </summary>
