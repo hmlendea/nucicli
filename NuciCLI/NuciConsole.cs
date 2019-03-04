@@ -163,7 +163,7 @@ namespace NuciCLI
         /// Writes the line to the standard output.
         /// </summary>
         /// <param name="text">Text.</param>
-        /// <param name="foregroundColour">Foreground NuciConsoleColour.</param>
+        /// <param name="foregroundColour">Foreground colour.</param>
         public static void WriteLine(string text, NuciConsoleColour foregroundColour)
             => WriteLine(text, foregroundColour, NuciConsoleColour.Default);
 
@@ -171,8 +171,8 @@ namespace NuciCLI
         /// Writes the line to the standard output.
         /// </summary>
         /// <param name="text">Text.</param>
-        /// <param name="foregroundColour">Foreground NuciConsoleColour.</param>
-        /// <param name="backgroundColour">Background NuciConsoleColour.</param>
+        /// <param name="foregroundColour">Foreground colour.</param>
+        /// <param name="backgroundColour">Background colour.</param>
         public static void WriteLine(string text, NuciConsoleColour foregroundColour, NuciConsoleColour backgroundColour)
             => Write(text + Environment.NewLine, foregroundColour, backgroundColour);
         
@@ -187,7 +187,7 @@ namespace NuciCLI
         /// Writes the text to the standard output.
         /// </summary>
         /// <param name="text">Text.</param>
-        /// <param name="foregroundColour">Foreground NuciConsoleColour.</param>
+        /// <param name="foregroundColour">Foreground colour.</param>
         public static void Write(string text, NuciConsoleColour foregroundColour)
             => Write(text, foregroundColour, NuciConsoleColour.Default);
         
@@ -195,8 +195,8 @@ namespace NuciCLI
         /// Writes the text to the standard output.
         /// </summary>
         /// <param name="text">Text.</param>
-        /// <param name="foregroundColour">Foreground NuciConsoleColour.</param>
-        /// <param name="backgroundColour">Background NuciConsoleColour.</param>
+        /// <param name="foregroundColour">Foreground colour.</param>
+        /// <param name="backgroundColour">Background colour.</param>
         public static void Write(string text, NuciConsoleColour foregroundColour, NuciConsoleColour backgroundColour)
         {
             ConsoleColor oldForegroundColour = Console.ForegroundColor;
