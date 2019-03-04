@@ -4,7 +4,8 @@ dotnet: 2.2
 dist: xenial
 
 install:
-- dotnet restore
+  - dotnet restore
+  - dotnet test NuciCLI.UnitTests
 
 script:
- - dotnet build
+  - dotnet build
