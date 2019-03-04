@@ -25,22 +25,36 @@ namespace NuciCLI
             }
         }
 
+        public static int CursorSize
+        {
+            get => Console.CursorSize;
+            set => Console.CursorSize = value;
+        }
+
+        public static bool IsCursorVisible
+        {
+            get => Console.CursorVisible;
+            set => Console.CursorVisible = value;
+        }
+
         public static int Width
         {
             get => Console.BufferWidth;
-            set
-            {
-                Console.SetBufferSize(value, Height);
-            }
+            set => SetSize(value, Console.BufferHeight);
         }
 
         public static int Height
         {
             get => Console.BufferHeight;
-            set
-            {
-                Console.SetBufferSize(Width, value);
-            }
+            set => SetSize(Console.BufferWidth, value);
+        }
+
+        public static int Area => Width * Height;
+
+        public static string Title
+        {
+            get => Console.Title;
+            set => Console.Title = value;
         }
 
         public static ConsoleKeyInfo ReadKey()
@@ -204,6 +218,12 @@ namespace NuciCLI
             
             Console.ForegroundColor = oldForegroundColour;
             Console.BackgroundColor = oldBackgroundColour;
+        }
+
+        public static void SetSize(int width, int height)
+        {
+            Console.SetBufferSize(width, height);
+            Console.SetWindowSize(width, height);
         }
     }
 }
