@@ -43,10 +43,16 @@ namespace NuciCLI
             }
         }
 
-        public static ConsoleKeyInfo ReadKey() => ReadKey(string.Empty);
-        public static ConsoleKeyInfo ReadKey(string prompt) => ReadKey(prompt, Colour.Default);
-        public static ConsoleKeyInfo ReadKey(string prompt, Colour foregroundColour) => ReadKey(prompt, foregroundColour, Colour.Default);
-        public static ConsoleKeyInfo ReadKey(string prompt, Colour foregroundColour, Colour backgroundColour)
+        public static ConsoleKeyInfo ReadKey()
+            => ReadKey(string.Empty);
+
+        public static ConsoleKeyInfo ReadKey(string prompt)
+            => ReadKey(prompt, NuciConsoleColour.Default);
+
+        public static ConsoleKeyInfo ReadKey(string prompt, NuciConsoleColour foregroundColour)
+            => ReadKey(prompt, foregroundColour, NuciConsoleColour.Default);
+
+        public static ConsoleKeyInfo ReadKey(string prompt, NuciConsoleColour foregroundColour, NuciConsoleColour backgroundColour)
         {
             NuciConsole.Write(prompt);
 
@@ -55,10 +61,16 @@ namespace NuciCLI
             return inputValue;
         }
         
-        public static string ReadLine() => NuciConsole.ReadLine(string.Empty);
-        public static string ReadLine(string prompt) => ReadLine(prompt, Colour.Default);
-        public static string ReadLine(string prompt, Colour foregroundColour) => ReadLine(prompt, foregroundColour, Colour.Default);
-        public static string ReadLine(string prompt, Colour foregroundColour, Colour backgroundColour)
+        public static string ReadLine()
+            => NuciConsole.ReadLine(string.Empty);
+
+        public static string ReadLine(string prompt)
+            => ReadLine(prompt, NuciConsoleColour.Default);
+
+        public static string ReadLine(string prompt, NuciConsoleColour foregroundColour)
+            => ReadLine(prompt, foregroundColour, NuciConsoleColour.Default);
+
+        public static string ReadLine(string prompt, NuciConsoleColour foregroundColour, NuciConsoleColour backgroundColour)
         {
             NuciConsole.Write(prompt);
 
@@ -71,22 +83,22 @@ namespace NuciCLI
             => ReadPermission(prompt, false);
 
         public static bool ReadPermission(string prompt, bool defaultValue)
-            => ReadPermission(prompt, defaultValue, Colour.Default);
+            => ReadPermission(prompt, defaultValue, NuciConsoleColour.Default);
 
-        public static bool ReadPermission(string prompt, Colour foregroundColour)
+        public static bool ReadPermission(string prompt, NuciConsoleColour foregroundColour)
             => ReadPermission(prompt, false, foregroundColour);
 
-        public static bool ReadPermission(string prompt, bool defaultValue, Colour foregroundColour)
-            => ReadPermission(prompt, defaultValue, foregroundColour, Colour.Default);
+        public static bool ReadPermission(string prompt, bool defaultValue, NuciConsoleColour foregroundColour)
+            => ReadPermission(prompt, defaultValue, foregroundColour, NuciConsoleColour.Default);
 
-        public static bool ReadPermission(string prompt, Colour foregroundColour, Colour backgroundColour)
+        public static bool ReadPermission(string prompt, NuciConsoleColour foregroundColour, NuciConsoleColour backgroundColour)
             => ReadPermission(prompt, false, foregroundColour, backgroundColour);
 
         public static bool ReadPermission(
             string prompt,
             bool defaultValue,
-            Colour foregroundColour,
-            Colour backgroundColour)
+            NuciConsoleColour foregroundColour,
+            NuciConsoleColour backgroundColour)
         {
             while (true)
             {
@@ -123,49 +135,55 @@ namespace NuciCLI
         /// <summary>
         /// Writes an empty line to the standard output.
         /// </summary>
-        public static void WriteLine() => WriteLine(string.Empty);
+        public static void WriteLine()
+            => WriteLine(string.Empty);
         
         /// <summary>
         /// Writes the line to the standard output.
         /// </summary>
         /// <param name="text">Text.</param>
-        public static void WriteLine(string text) => Console.WriteLine(text);
+        public static void WriteLine(string text)
+            => Console.WriteLine(text);
         
         /// <summary>
         /// Writes the line to the standard output.
         /// </summary>
         /// <param name="text">Text.</param>
-        /// <param name="foregroundColour">Foreground colour.</param>
-        public static void WriteLine(string text, Colour foregroundColour) => WriteLine(text, foregroundColour, Colour.Default);
+        /// <param name="foregroundColour">Foreground NuciConsoleColour.</param>
+        public static void WriteLine(string text, NuciConsoleColour foregroundColour)
+            => WriteLine(text, foregroundColour, NuciConsoleColour.Default);
 
         /// <summary>
         /// Writes the line to the standard output.
         /// </summary>
         /// <param name="text">Text.</param>
-        /// <param name="foregroundColour">Foreground colour.</param>
-        /// <param name="backgroundColour">Background colour.</param>
-        public static void WriteLine(string text, Colour foregroundColour, Colour backgroundColour) => Write(text + Environment.NewLine, foregroundColour, backgroundColour);
+        /// <param name="foregroundColour">Foreground NuciConsoleColour.</param>
+        /// <param name="backgroundColour">Background NuciConsoleColour.</param>
+        public static void WriteLine(string text, NuciConsoleColour foregroundColour, NuciConsoleColour backgroundColour)
+            => Write(text + Environment.NewLine, foregroundColour, backgroundColour);
         
         /// <summary>
         /// Writes the text to the standard output.
         /// </summary>
         /// <param name="text">Text.</param>
-        public static void Write(string text) => Console.Write(text);
+        public static void Write(string text)
+            => Console.Write(text);
         
         /// <summary>
         /// Writes the text to the standard output.
         /// </summary>
         /// <param name="text">Text.</param>
-        /// <param name="foregroundColour">Foreground colour.</param>
-        public static void Write(string text, Colour foregroundColour) => Write(text, foregroundColour, Colour.Default);
+        /// <param name="foregroundColour">Foreground NuciConsoleColour.</param>
+        public static void Write(string text, NuciConsoleColour foregroundColour)
+            => Write(text, foregroundColour, NuciConsoleColour.Default);
         
         /// <summary>
         /// Writes the text to the standard output.
         /// </summary>
         /// <param name="text">Text.</param>
-        /// <param name="foregroundColour">Foreground colour.</param>
-        /// <param name="backgroundColour">Background colour.</param>
-        public static void Write(string text, Colour foregroundColour, Colour backgroundColour)
+        /// <param name="foregroundColour">Foreground NuciConsoleColour.</param>
+        /// <param name="backgroundColour">Background NuciConsoleColour.</param>
+        public static void Write(string text, NuciConsoleColour foregroundColour, NuciConsoleColour backgroundColour)
         {
             ConsoleColor oldForegroundColour = Console.ForegroundColor;
             ConsoleColor oldBackgroundColour = Console.BackgroundColor;
@@ -174,12 +192,12 @@ namespace NuciCLI
 
             if (!(foregroundColour.ConsoleColour is null))
             {
-                Console.ForegroundColor = (ConsoleColor)foregroundColour.ConsoleColour;
+                Console.ForegroundColor = foregroundColour.ConsoleColour.Value;
             }
 
             if (!(backgroundColour.ConsoleColour is null))
             {
-                Console.BackgroundColor = (ConsoleColor)backgroundColour.ConsoleColour;
+                Console.BackgroundColor = backgroundColour.ConsoleColour.Value;
             }
 
             Console.Write(text, foregroundColour, backgroundColour);
