@@ -46,20 +46,27 @@ namespace NuciCLI.Menus
             menus = new Dictionary<string, Menu>();
         }
 
-        /// <summary>
-        /// Opens the menu.
-        /// </summary>
-        /// <param name="menuType">Menu type.</param>
-        public void OpenMenu(Type menuType) => OpenMenu(menuType, null);
+        public void OpenMenu<TMenu>() where TMenu : Menu
+            => OpenMenu<TMenu>(null);
+
+        public void OpenMenu<TMenu>(params object[] parameters) where TMenu : Menu
+            => OpenMenu(typeof(TMenu), parameters);
 
         /// <summary>
         /// Opens the menu.
         /// </summary>
         /// <param name="menuType">Menu type.</param>
-        /// <param name="menuArgs">Menu arguments.</param>
-        public void OpenMenu(Type menuType, params object[] menuArgs)
+        public void OpenMenu(Type menuType)
+            => OpenMenu(menuType, null);
+
+        /// <summary>
+        /// Opens the menu.
+        /// </summary>
+        /// <param name="menuType">Menu type.</param>
+        /// <param name="parameters">Menu parameters.</param>
+        public void OpenMenu(Type menuType, params object[] parameters)
         {   
-            Menu newMenu = (Menu)Activator.CreateInstance(menuType, menuArgs);
+            Menu newMenu = (Menu)Activator.CreateInstance(menuType, parameters);
 
             menus.Add(newMenu.Id, newMenu);
 
@@ -81,7 +88,8 @@ namespace NuciCLI.Menus
         /// <summary>
         /// Closes the current menu.
         /// </summary>
-        public void CloseMenu() => CloseMenu(currentMenuId);
+        public void CloseMenu()
+            => CloseMenu(currentMenuId);
 
         public void CloseMenu(string menuId)
         {
