@@ -13,7 +13,6 @@ namespace NuciCLI.Menus
         static object syncRoot = new object();
 
         IDictionary<string, Menu> menus;
-        string currentMenuId;
 
         /// <summary>
         /// Gets the instance.
@@ -37,6 +36,8 @@ namespace NuciCLI.Menus
                 return instance;
             }
         }
+
+        public string CurrentMenuId { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MenuManager"/> class.
@@ -70,18 +71,18 @@ namespace NuciCLI.Menus
 
             menus.Add(newMenu.Id, newMenu);
 
-            if (!string.IsNullOrWhiteSpace(currentMenuId))
+            if (!string.IsNullOrWhiteSpace(CurrentMenuId))
             {
-                Menu curMenu = menus[currentMenuId];
+                Menu curMenu = menus[CurrentMenuId];
 
                 curMenu.ChildrenIds.Add(newMenu.Id);
                 curMenu.Stop();
 
-                newMenu.ParentId = currentMenuId;
+                newMenu.ParentId = CurrentMenuId;
                 NuciConsole.WriteLine();
             }
 
-            currentMenuId = newMenu.Id;
+            CurrentMenuId = newMenu.Id;
             newMenu.Start();
         }
 
@@ -89,21 +90,21 @@ namespace NuciCLI.Menus
         /// Closes the current menu.
         /// </summary>
         public void CloseMenu()
-            => CloseMenu(currentMenuId);
+            => CloseMenu(CurrentMenuId);
 
         public void CloseMenu(string menuId)
         {
             Menu menu = menus[menuId];
 
-            currentMenuId = menu.ParentId;
+            CurrentMenuId = menu.ParentId;
 
             menus.Remove(menuId);
             menu.Dispose();
 
-            if (!string.IsNullOrWhiteSpace(currentMenuId))
+            if (!string.IsNullOrWhiteSpace(CurrentMenuId))
             {
                 NuciConsole.WriteLine();
-                menus[currentMenuId].Start();
+                menus[CurrentMenuId].Start();
             }
         }
     }
