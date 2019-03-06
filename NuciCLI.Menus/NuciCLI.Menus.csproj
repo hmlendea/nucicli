@@ -4,12 +4,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>NuciCLI.Menus</RootNamespace>
     <Version>1.2.2</Version>
-    <Description>Input management for NuciXNA</Description>
+    <Description>NuciCLI Menu management system</Description>
     <Authors>Horațiu Mlendea</Authors>
     <Copyright>Copyright 2019 © Horațiu Mlendea</Copyright>
-    <RepositoryUrl>https://github.com/hmlendea/nucixna</RepositoryUrl>
+    <RepositoryUrl>https://github.com/hmlendea/nucicli</RepositoryUrl>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-    <PackageTags>XNA MonoGame</PackageTags>
+    <PackageTags>Console Terminal CLI</PackageTags>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
