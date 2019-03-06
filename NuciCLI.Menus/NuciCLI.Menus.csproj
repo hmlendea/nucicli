@@ -1,14 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>netcoreapp2.2</TargetFramework>
-        <Version>1.2.0</Version>
-        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-        <RootNamespace>NuciCLI.Menus</RootNamespace>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>NuciCLI.Menus</RootNamespace>
+    <Version>1.2.0</Version>
+    <Description>Input management for NuciXNA</Description>
+    <Authors>Horațiu Mlendea</Authors>
+    <Copyright>Copyright 2019 © Horațiu Mlendea</Copyright>
+    <RepositoryUrl>https://github.com/hmlendea/nucixna</RepositoryUrl>
+    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <PackageTags>XNA MonoGame</PackageTags>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="NuciCLI" Version="1.1.2" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NuciCLI" Version="1.2.0" />
+  </ItemGroup>
     
 </Project>

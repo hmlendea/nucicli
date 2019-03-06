@@ -25,19 +25,19 @@ namespace NuciCLI.Menus
         /// Gets or sets the title colour.
         /// </summary>
         /// <value>The title colour.</value>
-        public Colour TitleColour { get; set; }
+        public NuciConsoleColour TitleColour { get; set; }
 
         /// <summary>
         /// Gets or sets the title decoration colour.
         /// </summary>
         /// <value>The title decoration colour.</value>
-        public Colour TitleDecorationColour { get; set; }
+        public NuciConsoleColour TitleDecorationColour { get; set; }
 
         /// <summary>
         /// Gets or sets the prompt colour.
         /// </summary>
         /// <value>The prompt colour.</value>
-        public Colour PromptColour { get; set; }
+        public NuciConsoleColour PromptColour { get; set; }
 
         /// <summary>
         /// Gets or sets the title.
@@ -71,9 +71,9 @@ namespace NuciCLI.Menus
             Id = Guid.NewGuid().ToString();
             ChildrenIds = new List<string>();
 
-            TitleColour = Colour.Green;
-            TitleDecorationColour = Colour.Yellow;
-            PromptColour = Colour.White;
+            TitleColour = NuciConsoleColour.Green;
+            TitleDecorationColour = NuciConsoleColour.Yellow;
+            PromptColour = NuciConsoleColour.White;
 
             AddCommand("exit", "Exit this menu", Dispose);
             AddCommand("help", "Prints the command list", PrintCommandList);
@@ -189,7 +189,7 @@ namespace NuciCLI.Menus
         {
             if (!commands.ContainsKey(cmd))
             {
-                NuciConsole.WriteLine("Unknown command", Colour.Red);
+                NuciConsole.WriteLine("Unknown command", NuciConsoleColour.Red);
                 return;
             }
 
@@ -210,11 +210,11 @@ namespace NuciCLI.Menus
             
             if (result.WasSuccessful)
             {
-                NuciConsole.Write("sucessfully", Colour.Green);
+                NuciConsole.Write("sucessfully", NuciConsoleColour.Green);
             }
             else
             {
-                NuciConsole.Write("unsucessfully", Colour.Red);
+                NuciConsole.Write("unsucessfully", NuciConsoleColour.Red);
             }
             
             NuciConsole.Write(" in ");
@@ -234,7 +234,7 @@ namespace NuciCLI.Menus
 
             if (!result.WasSuccessful)
             {
-                NuciConsole.WriteLine($"Error message: {result.Exception.Message}", Colour.Red);
+                NuciConsole.WriteLine($"Error message: {result.Exception.Message}", NuciConsoleColour.Red);
                 throw result.Exception;
             }
         }
