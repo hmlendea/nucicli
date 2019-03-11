@@ -59,7 +59,7 @@ namespace NuciCLI.Menus
 
         public bool AreStatisticsEnabled { get; set; }
 
-        bool disposed;
+        public bool IsDisposed { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Menu"/> class.
@@ -102,7 +102,7 @@ namespace NuciCLI.Menus
 
         protected virtual void Dispose(bool disposing)
         {
-            if (disposed || !disposing)
+            if (IsDisposed || !disposing)
             {
                 return;
             }
@@ -110,7 +110,7 @@ namespace NuciCLI.Menus
             commands.Clear();
             IsRunning = false;
 
-            disposed = true;
+            IsDisposed = true;
 
             foreach (string childId in ChildrenIds)
             {
