@@ -11,8 +11,6 @@ namespace NuciCLI.Menus
     /// </summary>
     public class Menu : IDisposable
     {
-        readonly Dictionary<string, Command> commands;
-
         public string Id { get; set; }
 
         public string ParentId { get; set; }
@@ -60,6 +58,8 @@ namespace NuciCLI.Menus
         public bool AreStatisticsEnabled { get; set; }
 
         public bool IsDisposed { get; private set; }
+        
+        readonly Dictionary<string, Command> commands;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Menu"/> class.
@@ -76,7 +76,7 @@ namespace NuciCLI.Menus
             PromptColour = NuciConsoleColour.White;
 
             AddCommand("exit", "Exit this menu", Dispose);
-            AddCommand("help", "Prints the command list", PrintCommandList);
+            AddCommand("help", "Prints the command list", HandleHelp);
         }
 
         /// <summary>
@@ -124,8 +124,8 @@ namespace NuciCLI.Menus
         {
             IsRunning = true;
 
-            PrintTitle();
-            PrintCommandList();
+            MenuPrinter.PrintTitle(Title, TitleDecoration, TitleColour, TitleDecorationColour);
+            MenuPrinter.PrintCommandList(commands);
 
             while (IsRunning)
             {
@@ -156,33 +156,6 @@ namespace NuciCLI.Menus
         }
 
         /// <summary>
-        /// Prints the title.
-        /// </summary>
-        void PrintTitle()
-        {
-            NuciConsole.Write(TitleDecoration, TitleDecorationColour);
-            NuciConsole.Write(Title, TitleColour);
-            NuciConsole.Write(TitleDecoration.Reverse(), TitleDecorationColour);
-
-            NuciConsole.WriteLine();
-        }
-
-        /// <summary>
-        /// Prints the command list.
-        /// </summary>
-        void PrintCommandList()
-        {
-            int commandColumnWidth = commands.Keys.Max(x => x.Length) + 4;
-
-            foreach (Command command in commands.Values)
-            {
-                string formattedName = command.Name.PadRight(commandColumnWidth);
-
-                NuciConsole.WriteLine($"{formattedName} {command.Description}");
-            }
-        }
-
-        /// <summary>
         /// Handles the command.
         /// </summary>
         void HandleCommand(string cmd)
@@ -197,46 +170,15 @@ namespace NuciCLI.Menus
 
             if (AreStatisticsEnabled)
             {
-                PrintCommandResults(result);
+                MenuPrinter.PrintCommandResults(result);
             }
 
             NuciConsole.WriteLine();
         }
 
-        void PrintCommandResults(CommandResult result)
+        void HandleHelp()
         {
-            NuciConsole.WriteLine();
-            NuciConsole.Write("Command finished ");
-            
-            if (result.WasSuccessful)
-            {
-                NuciConsole.Write("sucessfully", NuciConsoleColour.Green);
-            }
-            else
-            {
-                NuciConsole.Write("unsucessfully", NuciConsoleColour.Red);
-            }
-            
-            NuciConsole.Write(" in ");
-
-            if (result.Duration.TotalSeconds < 1)
-            {
-                NuciConsole.WriteLine($"{result.Duration.TotalMilliseconds}ms");
-            }
-            else if (result.Duration.TotalMinutes < 1)
-            {
-                NuciConsole.WriteLine($"{result.Duration.TotalSeconds}s");
-            }
-            else
-            {
-                NuciConsole.WriteLine($"{result.Duration.TotalMinutes}m");
-            }
-
-            if (!result.WasSuccessful)
-            {
-                NuciConsole.WriteLine($"Error message: {result.Exception.Message}", NuciConsoleColour.Red);
-                throw result.Exception;
-            }
+            MenuPrinter.PrintCommandList(commands);
         }
     }
 }
