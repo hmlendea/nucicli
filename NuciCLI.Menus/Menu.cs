@@ -17,8 +17,6 @@ namespace NuciCLI.Menus
 
         public IList<string> ChildrenIds { get; set; }
 
-        public bool IsRunning { get; private set; }
-
         /// <summary>
         /// Gets or sets the title colour.
         /// </summary>
@@ -58,6 +56,28 @@ namespace NuciCLI.Menus
         public bool AreStatisticsEnabled { get; set; }
 
         public bool IsDisposed { get; private set; }
+
+        public bool IsRunning { get; private set; }
+
+        /// <summary>
+        /// Occurs when this <see cref="Menu"/> was created.
+        /// </summary>
+        public event EventHandler Created;
+
+        /// <summary>
+        /// Occurs when this <see cref="Menu"/> was disposed.
+        /// </summary>
+        public event EventHandler Disposed;
+
+        /// <summary>
+        /// Occurs when this <see cref="Menu"/> was started.
+        /// </summary>
+        public event EventHandler Started;
+
+        /// <summary>
+        /// Occurs when this <see cref="Menu"/> was stopped.
+        /// </summary>
+        public event EventHandler Stopped;
         
         readonly Dictionary<string, Command> commands;
 
@@ -77,6 +97,8 @@ namespace NuciCLI.Menus
 
             AddCommand("exit", "Exit this menu", Dispose);
             AddCommand("help", "Prints the command list", HandleHelp);
+
+            Created?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -118,6 +140,7 @@ namespace NuciCLI.Menus
             }
             
             MenuManager.Instance.CloseMenu(Id);
+            Disposed?.Invoke(this, EventArgs.Empty);
         }
 
         public void Start()
@@ -126,6 +149,8 @@ namespace NuciCLI.Menus
 
             MenuPrinter.PrintTitle(Title, TitleDecoration, TitleColour, TitleDecorationColour);
             MenuPrinter.PrintCommandList(commands);
+
+            Started?.Invoke(this, EventArgs.Empty);
 
             while (IsRunning)
             {
@@ -140,6 +165,8 @@ namespace NuciCLI.Menus
         public void Stop()
         {
             IsRunning = false;
+
+            Stopped?.Invoke(this, EventArgs.Empty);
         }
         
         /// <summary>
