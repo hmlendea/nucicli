@@ -39,6 +39,8 @@ namespace NuciCLI.Menus
         {
             NuciConsole.WriteLine();
             NuciConsole.Write("Command finished ");
+
+            string durationString = GetHumanFriendlyDurationString(result.Duration);
             
             if (result.WasSuccessful)
             {
@@ -49,25 +51,28 @@ namespace NuciCLI.Menus
                 NuciConsole.Write("unsucessfully", NuciConsoleColour.Red);
             }
             
-            NuciConsole.Write(" in ");
-
-            if (result.Duration.TotalSeconds < 1)
-            {
-                NuciConsole.WriteLine($"{result.Duration.TotalMilliseconds}ms");
-            }
-            else if (result.Duration.TotalMinutes < 1)
-            {
-                NuciConsole.WriteLine($"{result.Duration.TotalSeconds}s");
-            }
-            else
-            {
-                NuciConsole.WriteLine($"{result.Duration.TotalMinutes}m");
-            }
+            NuciConsole.Write($" in {durationString}");
 
             if (!result.WasSuccessful)
             {
                 NuciConsole.WriteLine($"Error message: {result.Exception.Message}", NuciConsoleColour.Red);
                 throw result.Exception;
+            }
+        }
+
+        private static string GetHumanFriendlyDurationString(TimeSpan timeSpan)
+        {
+            if (timeSpan.TotalSeconds < 1)
+            {
+                return $"{timeSpan.TotalMilliseconds}ms";
+            }
+            else if (timeSpan.TotalMinutes < 1)
+            {
+                return $"{timeSpan.TotalSeconds}s";
+            }
+            else
+            {
+                return $"{timeSpan.TotalMinutes}m";
             }
         }
     }
