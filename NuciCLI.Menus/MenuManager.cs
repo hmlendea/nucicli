@@ -9,17 +9,6 @@ namespace NuciCLI.Menus
     /// </summary>
     public class MenuManager
     {
-        public bool IsRunning { get; private set; }
-
-        public bool AreStatisticsEnabled { get; set; }
-
-        static volatile MenuManager instance;
-        static object syncRoot = new object();
-
-        IDictionary<string, Menu> menus;
-
-        Menu CurrentMenu => menus[CurrentMenuId];
-
         /// <summary>
         /// Gets the instance.
         /// </summary>
@@ -43,7 +32,26 @@ namespace NuciCLI.Menus
             }
         }
 
-        public string CurrentMenuId { get; private set; }
+        public string ActiveMenuId { get; private set; }
+
+        public bool IsRunning { get; private set; }
+
+        public bool AreStatisticsEnabled { get; set; }
+
+        public EventHandler Starting;
+
+        public EventHandler Started;
+
+        public EventHandler Stopped;
+
+        public EventHandler ActiveMenuChanged;
+
+        static volatile MenuManager instance;
+        static object syncRoot = new object();
+
+        IDictionary<string, Menu> menus;
+
+        Menu ActiveMenu => menus[ActiveMenuId];
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MenuManager"/> class.
@@ -58,19 +66,25 @@ namespace NuciCLI.Menus
 
         public void Start<TMenu>(params object[] parameters) where TMenu : Menu
         {
+            Starting?.Invoke(this, EventArgs.Empty);
+
             OpenMenu<TMenu>(parameters);
-            Menu menu = menus[CurrentMenuId];
+            Menu menu = menus[ActiveMenuId];
 
             IsRunning = true;
+
+            Started?.Invoke(this, EventArgs.Empty);
 
             while (IsRunning)
             {
                 NuciConsole.WriteLine();
 
-                string cmd = NuciConsole.ReadLine(CurrentMenu.Prompt, CurrentMenu.PromptColour);
+                string cmd = NuciConsole.ReadLine(ActiveMenu.Prompt, ActiveMenu.PromptColour);
                 
                 HandleCommand(cmd);
             }
+
+            Stopped?.Invoke(this, EventArgs.Empty);
         }
 
         public void OpenMenu<TMenu>() where TMenu : Menu
@@ -97,9 +111,9 @@ namespace NuciCLI.Menus
 
             menus.Add(newMenu.Id, newMenu);
 
-            if (!string.IsNullOrWhiteSpace(CurrentMenuId))
+            if (!string.IsNullOrWhiteSpace(ActiveMenuId))
             {
-                Menu curMenu = menus[CurrentMenuId];
+                Menu curMenu = menus[ActiveMenuId];
 
                 newMenu.ParentId = curMenu.Id;
                 NuciConsole.WriteLine();
@@ -112,7 +126,7 @@ namespace NuciCLI.Menus
         /// Closes the current menu.
         /// </summary>
         public void CloseMenu()
-            => CloseMenu(CurrentMenuId);
+            => CloseMenu(ActiveMenuId);
 
         public void CloseMenu(string menuId)
         {
@@ -135,13 +149,15 @@ namespace NuciCLI.Menus
 
         public void SwitchToMenu(string menuId)
         {
-            if (CurrentMenuId == menuId)
+            if (ActiveMenuId == menuId)
             {
                 return;
             }
-            
-            CurrentMenuId = menuId;
-            MenuPrinter.PrintMenuHeader(CurrentMenu);
+
+            ActiveMenuId = menuId;
+            MenuPrinter.PrintMenuHeader(ActiveMenu);
+
+            ActiveMenuChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -149,13 +165,13 @@ namespace NuciCLI.Menus
         /// </summary>
         void HandleCommand(string cmd)
         {
-            if (!CurrentMenu.Commands.ContainsKey(cmd))
+            if (!ActiveMenu.Commands.ContainsKey(cmd))
             {
                 NuciConsole.WriteLine("Unknown command", NuciConsoleColour.Red);
                 return;
             }
 
-            Command command = CurrentMenu.Commands[cmd];
+            Command command = ActiveMenu.Commands[cmd];
             CommandResult result = command.Execute();
 
             if (AreStatisticsEnabled)
