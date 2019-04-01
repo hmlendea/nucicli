@@ -51,11 +51,7 @@ namespace NuciCLI.Menus
         /// <value>The prompt.</value>
         public string Prompt { get; set; } = "> ";
 
-        public bool AreStatisticsEnabled { get; set; }
-
         public bool IsDisposed { get; private set; }
-
-        public bool IsRunning { get; private set; }
 
         /// <summary>
         /// Occurs when this <see cref="Menu"/> was created.
@@ -66,25 +62,15 @@ namespace NuciCLI.Menus
         /// Occurs when this <see cref="Menu"/> was disposed.
         /// </summary>
         public event EventHandler Disposed;
-
-        /// <summary>
-        /// Occurs when this <see cref="Menu"/> was started.
-        /// </summary>
-        public event EventHandler Started;
-
-        /// <summary>
-        /// Occurs when this <see cref="Menu"/> was stopped.
-        /// </summary>
-        public event EventHandler Stopped;
         
-        readonly Dictionary<string, Command> commands;
+        internal Dictionary<string, Command> Commands { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Menu"/> class.
         /// </summary>
         public Menu()
         {
-            commands = new Dictionary<string, Command>();
+            Commands = new Dictionary<string, Command>();
             
             Id = Guid.NewGuid().ToString();
 
@@ -128,36 +114,9 @@ namespace NuciCLI.Menus
 
             IsDisposed = true;
 
-            commands.Clear();
-            IsRunning = false;
+            Commands.Clear();
 
             Disposed?.Invoke(this, EventArgs.Empty);
-        }
-
-        public void Start()
-        {
-            IsRunning = true;
-
-            MenuPrinter.PrintTitle(Title, TitleDecoration, TitleColour, TitleDecorationColour);
-            MenuPrinter.PrintCommandList(commands);
-
-            Started?.Invoke(this, EventArgs.Empty);
-
-            while (IsRunning)
-            {
-                NuciConsole.WriteLine();
-
-                string cmd = NuciConsole.ReadLine(Prompt, PromptColour);
-                
-                HandleCommand(cmd);
-            }
-        }
-
-        public void Stop()
-        {
-            IsRunning = false;
-
-            Stopped?.Invoke(this, EventArgs.Empty);
         }
 
         public void Exit()
@@ -175,38 +134,12 @@ namespace NuciCLI.Menus
         {
             Command command = new Command(name, description, action);
             
-            commands.Add(command.Name, command);
-        }
-
-        /// <summary>
-        /// Handles the command.
-        /// </summary>
-        void HandleCommand(string cmd)
-        {
-            if (!commands.ContainsKey(cmd))
-            {
-                NuciConsole.WriteLine("Unknown command", NuciConsoleColour.Red);
-                return;
-            }
-
-            CommandResult result = commands[cmd].Execute();
-
-            if (IsDisposed)
-            {
-                return;
-            }
-
-            if (AreStatisticsEnabled)
-            {
-                MenuPrinter.PrintCommandResults(result);
-            }
-
-            NuciConsole.WriteLine();
+            Commands.Add(command.Name, command);
         }
 
         void HandleHelp()
         {
-            MenuPrinter.PrintCommandList(commands);
+            MenuPrinter.PrintCommandList(Commands);
         }
     }
 }

@@ -8,14 +8,20 @@ namespace NuciCLI.Menus
 {
     internal class MenuPrinter
     {
+        public static void PrintMenuHeader(Menu menu)
+        {
+            MenuPrinter.PrintTitle(menu);
+            MenuPrinter.PrintCommandList(menu.Commands);
+        }
+
         /// <summary>
         /// Prints the title.
         /// </summary>
-        public static void PrintTitle(string title, string decoration, NuciConsoleColour titleColour, NuciConsoleColour decorationColour)
+        public static void PrintTitle(Menu menu)
         {
-            NuciConsole.Write(decoration, decorationColour);
-            NuciConsole.Write(title, titleColour);
-            NuciConsole.Write(decoration.Reverse(), decorationColour);
+            NuciConsole.Write(menu.TitleDecoration, menu.TitleDecorationColour);
+            NuciConsole.Write(menu.Title, menu.TitleColour);
+            NuciConsole.Write(menu.TitleDecoration.Reverse(), menu.TitleDecorationColour);
 
             NuciConsole.WriteLine();
         }
@@ -23,7 +29,7 @@ namespace NuciCLI.Menus
         /// <summary>
         /// Prints the command list.
         /// </summary>
-        public static void PrintCommandList(Dictionary<string, Command> commands)
+        public static void PrintCommandList(IDictionary<string, Command> commands)
         {
             int commandColumnWidth = commands.Keys.Max(x => x.Length) + 4;
 

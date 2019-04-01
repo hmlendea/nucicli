@@ -9,10 +9,16 @@ namespace NuciCLI.Menus
     /// </summary>
     public class MenuManager
     {
+        public bool IsRunning { get; private set; }
+
+        public bool AreStatisticsEnabled { get; set; }
+
         static volatile MenuManager instance;
         static object syncRoot = new object();
 
         IDictionary<string, Menu> menus;
+
+        Menu CurrentMenu => menus[CurrentMenuId];
 
         /// <summary>
         /// Gets the instance.
@@ -47,6 +53,26 @@ namespace NuciCLI.Menus
             menus = new Dictionary<string, Menu>();
         }
 
+        public void Start<TMenu>() where TMenu : Menu
+            => Start<TMenu>(null);
+
+        public void Start<TMenu>(params object[] parameters) where TMenu : Menu
+        {
+            OpenMenu<TMenu>(parameters);
+            Menu menu = menus[CurrentMenuId];
+
+            IsRunning = true;
+
+            while (IsRunning)
+            {
+                NuciConsole.WriteLine();
+
+                string cmd = NuciConsole.ReadLine(CurrentMenu.Prompt, CurrentMenu.PromptColour);
+                
+                HandleCommand(cmd);
+            }
+        }
+
         public void OpenMenu<TMenu>() where TMenu : Menu
             => OpenMenu<TMenu>(null);
 
@@ -75,14 +101,11 @@ namespace NuciCLI.Menus
             {
                 Menu curMenu = menus[CurrentMenuId];
 
-                curMenu.Stop();
-
                 newMenu.ParentId = curMenu.Id;
                 NuciConsole.WriteLine();
             }
 
-            CurrentMenuId = newMenu.Id;
-            newMenu.Start();
+            SwitchToMenu(newMenu.Id);
         }
 
         /// <summary>
@@ -97,16 +120,50 @@ namespace NuciCLI.Menus
 
             string parentId = menu.ParentId;
 
-            menu.Dispose();
             menus.Remove(menuId);
+            menu.Dispose();
 
-            if (!string.IsNullOrWhiteSpace(parentId))
+            if (!string.IsNullOrEmpty(parentId))
             {
-                NuciConsole.WriteLine();
-
-                CurrentMenuId = parentId;
-                menus[CurrentMenuId].Start();
+                SwitchToMenu(parentId);
             }
+            else
+            {
+                IsRunning = false;
+            }
+        }
+
+        public void SwitchToMenu(string menuId)
+        {
+            if (CurrentMenuId == menuId)
+            {
+                return;
+            }
+            
+            CurrentMenuId = menuId;
+            MenuPrinter.PrintMenuHeader(CurrentMenu);
+        }
+
+        /// <summary>
+        /// Handles the command.
+        /// </summary>
+        void HandleCommand(string cmd)
+        {
+            if (!CurrentMenu.Commands.ContainsKey(cmd))
+            {
+                NuciConsole.WriteLine("Unknown command", NuciConsoleColour.Red);
+                return;
+            }
+
+            Command command = CurrentMenu.Commands[cmd];
+            CommandResult result = command.Execute();
+
+            if (AreStatisticsEnabled)
+            {
+                MenuPrinter.PrintCommandResults(result);
+            }
+
+            NuciConsole.WriteLine();
         }
     }
 }
