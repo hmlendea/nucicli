@@ -15,8 +15,6 @@ namespace NuciCLI.Menus
 
         public string ParentId { get; set; }
 
-        public IList<string> ChildrenIds { get; set; }
-
         /// <summary>
         /// Gets or sets the title colour.
         /// </summary>
@@ -89,13 +87,12 @@ namespace NuciCLI.Menus
             commands = new Dictionary<string, Command>();
             
             Id = Guid.NewGuid().ToString();
-            ChildrenIds = new List<string>();
 
             TitleColour = NuciConsoleColour.Green;
             TitleDecorationColour = NuciConsoleColour.Yellow;
             PromptColour = NuciConsoleColour.White;
 
-            AddCommand("exit", "Exit this menu", Dispose);
+            AddCommand("exit", "Exit this menu", Exit);
             AddCommand("help", "Prints the command list", HandleHelp);
 
             Created?.Invoke(this, EventArgs.Empty);
@@ -129,17 +126,11 @@ namespace NuciCLI.Menus
                 return;
             }
 
+            IsDisposed = true;
+
             commands.Clear();
             IsRunning = false;
 
-            IsDisposed = true;
-
-            foreach (string childId in ChildrenIds)
-            {
-                MenuManager.Instance.CloseMenu(childId);
-            }
-            
-            MenuManager.Instance.CloseMenu(Id);
             Disposed?.Invoke(this, EventArgs.Empty);
         }
 
@@ -168,6 +159,11 @@ namespace NuciCLI.Menus
 
             Stopped?.Invoke(this, EventArgs.Empty);
         }
+
+        public void Exit()
+        {
+            MenuManager.Instance.CloseMenu(Id);
+        }
         
         /// <summary>
         /// Adds the command.
@@ -194,6 +190,11 @@ namespace NuciCLI.Menus
             }
 
             CommandResult result = commands[cmd].Execute();
+
+            if (IsDisposed)
+            {
+                return;
+            }
 
             if (AreStatisticsEnabled)
             {

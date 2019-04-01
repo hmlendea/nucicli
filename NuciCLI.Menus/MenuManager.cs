@@ -75,10 +75,9 @@ namespace NuciCLI.Menus
             {
                 Menu curMenu = menus[CurrentMenuId];
 
-                curMenu.ChildrenIds.Add(newMenu.Id);
                 curMenu.Stop();
 
-                newMenu.ParentId = CurrentMenuId;
+                newMenu.ParentId = curMenu.Id;
                 NuciConsole.WriteLine();
             }
 
@@ -96,14 +95,16 @@ namespace NuciCLI.Menus
         {
             Menu menu = menus[menuId];
 
-            CurrentMenuId = menu.ParentId;
+            string parentId = menu.ParentId;
 
-            menus.Remove(menuId);
             menu.Dispose();
+            menus.Remove(menuId);
 
-            if (!string.IsNullOrWhiteSpace(CurrentMenuId))
+            if (!string.IsNullOrWhiteSpace(parentId))
             {
                 NuciConsole.WriteLine();
+
+                CurrentMenuId = parentId;
                 menus[CurrentMenuId].Start();
             }
         }
