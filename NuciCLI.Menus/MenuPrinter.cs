@@ -74,17 +74,13 @@ namespace NuciCLI.Menus
 
         private static string GetHumanFriendlyDurationString(TimeSpan timeSpan)
         {
-            if (timeSpan.TotalSeconds < 1)
+            if (timeSpan.TotalMinutes < 1)
             {
-                return $"{timeSpan.TotalMilliseconds}ms";
-            }
-            else if (timeSpan.TotalMinutes < 1)
-            {
-                return $"{timeSpan.TotalSeconds}s";
+                return $"{timeSpan.TotalSeconds:0.00}s";
             }
             else
             {
-                return $"{timeSpan.TotalMinutes}m";
+                return $"{timeSpan.TotalMinutes:0.00}m";
             }
         }
     }
