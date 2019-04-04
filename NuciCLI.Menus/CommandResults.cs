@@ -12,7 +12,23 @@ namespace NuciCLI.Menus
 
         public Exception Exception { get; }
 
-        public bool WasSuccessful => Exception is null;
+        public CommandStatus Status
+        {
+            get
+            {
+                if (Exception is null)
+                {
+                    return CommandStatus.Success;
+                }
+
+                if (Exception is InputCancellationException)
+                {
+                    return CommandStatus.Cancelled;
+                }
+
+                return CommandStatus.Failure;
+            }
+        }
 
         public CommandResult(DateTime startTime, DateTime endTime)
         {

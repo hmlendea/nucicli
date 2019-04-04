@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace NuciCLI
 {
@@ -86,9 +87,42 @@ namespace NuciCLI
 
         public static string ReadLine(string prompt, NuciConsoleColour foregroundColour, NuciConsoleColour backgroundColour)
         {
-            NuciConsole.Write(prompt);
+            NuciConsole.Write(prompt, foregroundColour, backgroundColour);
+            
+            string inputValue = string.Empty;
 
-            string inputValue = Console.ReadLine();
+            ConsoleKeyInfo key = Console.ReadKey(true);
+
+            while (true)
+            {
+                if (key.Key == ConsoleKey.Escape)
+                {
+                    Console.WriteLine();
+                    throw new InputCancellationException();
+                }
+
+                if (key.Key == ConsoleKey.Enter)
+                {
+                    Console.WriteLine();
+                    break;
+                }
+                else if (key.Key == ConsoleKey.Backspace && inputValue.Length > 0)
+                {
+                    inputValue = inputValue.Substring(0, inputValue.Length - 1);
+                    CursorX -= 1;
+                }
+                else if (
+                    char.IsLetterOrDigit(key.KeyChar) ||
+                    char.IsSymbol(key.KeyChar) ||
+                    char.IsPunctuation(key.KeyChar) ||
+                    char.IsWhiteSpace(key.KeyChar))
+                {
+                    inputValue += key.KeyChar;
+                    Console.Write(key.KeyChar);
+                }
+
+                key = Console.ReadKey(true);
+            }
 
             return inputValue;
         }

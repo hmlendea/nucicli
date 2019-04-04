@@ -28,6 +28,10 @@ namespace NuciCLI.Menus
                 action();
                 result = new CommandResult(startTime, DateTime.Now);
             }
+            catch (InputCancellationException ex)
+            {
+                result = new CommandResult(startTime, DateTime.Now, ex);
+            }
             catch (Exception ex)
             {
                 result = new CommandResult(startTime, DateTime.Now, ex);

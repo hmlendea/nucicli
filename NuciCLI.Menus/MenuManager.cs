@@ -77,11 +77,7 @@ namespace NuciCLI.Menus
 
             while (IsRunning)
             {
-                NuciConsole.WriteLine();
-
-                string cmd = NuciConsole.ReadLine(ActiveMenu.Prompt, ActiveMenu.PromptColour);
-                
-                HandleCommand(cmd);
+                TakeCommand();
             }
 
             Stopped?.Invoke(this, EventArgs.Empty);
@@ -163,8 +159,20 @@ namespace NuciCLI.Menus
         /// <summary>
         /// Handles the command.
         /// </summary>
-        void HandleCommand(string cmd)
+        void TakeCommand()
         {
+            string cmd = null;
+            
+            try
+            {
+                cmd = NuciConsole.ReadLine(ActiveMenu.Prompt, ActiveMenu.PromptColour);
+            }
+            catch (InputCancellationException)
+            {
+                NuciConsole.CursorY -= 1;
+                return;
+            }
+
             if (!ActiveMenu.Commands.ContainsKey(cmd))
             {
                 NuciConsole.WriteLine("Unknown command", NuciConsoleColour.Red);

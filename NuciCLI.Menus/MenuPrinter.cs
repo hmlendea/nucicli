@@ -12,6 +12,7 @@ namespace NuciCLI.Menus
         {
             MenuPrinter.PrintTitle(menu);
             MenuPrinter.PrintCommandList(menu.Commands);
+            NuciConsole.WriteLine();
         }
 
         /// <summary>
@@ -44,25 +45,31 @@ namespace NuciCLI.Menus
         public static void PrintCommandResults(CommandResult result)
         {
             NuciConsole.WriteLine();
-            NuciConsole.Write("Command finished ");
+            NuciConsole.Write("Command finished with status ");
 
             string durationString = GetHumanFriendlyDurationString(result.Duration);
             
-            if (result.WasSuccessful)
+            if (result.Status == CommandStatus.Success)
             {
-                NuciConsole.Write("sucessfully", NuciConsoleColour.Green);
+                NuciConsole.Write("Success", NuciConsoleColour.Green);
             }
-            else
+            else if (result.Status == CommandStatus.Failure)
             {
-                NuciConsole.Write("unsucessfully", NuciConsoleColour.Red);
+                NuciConsole.Write("Failed", NuciConsoleColour.Red);
+            }
+            else if (result.Status == CommandStatus.Cancelled)
+            {
+                NuciConsole.Write("Cancelled", NuciConsoleColour.Yellow);
             }
             
-            NuciConsole.Write($" in {durationString}");
+            NuciConsole.Write($" after {durationString}");
 
-            if (!result.WasSuccessful)
+            if (result.Status == CommandStatus.Failure)
             {
                 NuciConsole.WriteLine($"Error message: {result.Exception.Message}", NuciConsoleColour.Red);
             }
+
+            NuciConsole.WriteLine();
         }
 
         private static string GetHumanFriendlyDurationString(TimeSpan timeSpan)
