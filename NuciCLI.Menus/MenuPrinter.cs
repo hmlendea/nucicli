@@ -6,7 +6,7 @@ using NuciCLI.Extensions;
 
 namespace NuciCLI.Menus
 {
-    internal class MenuPrinter
+    internal static class MenuPrinter
     {
         public static void PrintMenuHeader(Menu menu)
         {
@@ -62,7 +62,6 @@ namespace NuciCLI.Menus
             if (!result.WasSuccessful)
             {
                 NuciConsole.WriteLine($"Error message: {result.Exception.Message}", NuciConsoleColour.Red);
-                throw result.Exception;
             }
         }
 

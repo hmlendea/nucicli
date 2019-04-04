@@ -31,6 +31,7 @@ namespace NuciCLI.Menus
             catch (Exception ex)
             {
                 result = new CommandResult(startTime, DateTime.Now, ex);
+                throw;
             }
 
             return result;
