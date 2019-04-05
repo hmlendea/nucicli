@@ -97,7 +97,9 @@ namespace NuciCLI
             {
                 if (key.Key == ConsoleKey.Escape)
                 {
-                    Console.WriteLine();
+                    CursorX -= inputValue.Length;
+                    Console.WriteLine(string.Empty.PadRight(inputValue.Length));
+                    
                     throw new InputCancellationException();
                 }
 
@@ -109,6 +111,8 @@ namespace NuciCLI
                 else if (key.Key == ConsoleKey.Backspace && inputValue.Length > 0)
                 {
                     inputValue = inputValue.Substring(0, inputValue.Length - 1);
+                    CursorX -= 1;
+                    Console.Write(' ');
                     CursorX -= 1;
                 }
                 else if (
