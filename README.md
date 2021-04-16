@@ -1,7 +1,10 @@
-[![Build Status](https://travis-ci.com/hmlendea/nucicli.svg?branch=master)](https://travis-ci.com/hmlendea/nuciweb)
-
-[![Nuget](https://img.shields.io/nuget/v/NuciCLI.svg?label=NuciCLI)](https://www.nuget.org/packages/NuciCLI/) [![Nuget](https://img.shields.io/nuget/v/NuciCLI.Menus.svg?label=NuciCLI.Menus)](https://www.nuget.org/packages/NuciCLI.Menus/)
+[![Build Status](https://travis-ci.com/hmlendea/nucicli.svg?branch=master)](https://travis-ci.com/hmlendea/nucicli) [![Nuget](https://img.shields.io/nuget/v/NuciCLI.svg?label=NuciCLI)](https://www.nuget.org/packages/NuciCLI/)
 
 # NuciCLI
 
-NuciCLI NuGet package for command-line interfaces
+ - [NuciCLI](https://github.com/hmlendea/nucicli)
+ - [NuciCLI.Menus](https://github.com/hmlendea/nucicli.menus)
+
+# About
+
+NuGet package for command-line interfaces
