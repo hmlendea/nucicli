@@ -2,8 +2,6 @@ using System;
 
 using NUnit.Framework;
 
-using NuciCLI;
-
 namespace NuciCLI.UnitTests
 {
     public class CliArgumentsReaderTests
