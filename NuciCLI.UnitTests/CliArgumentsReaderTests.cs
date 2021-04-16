@@ -2,8 +2,6 @@ using System;
 
 using NUnit.Framework;
 
-using NuciCLI;
-
 namespace NuciCLI.UnitTests
 {
     public class CliArgumentsReaderTests
@@ -53,7 +51,7 @@ namespace NuciCLI.UnitTests
         }
 
         [Test]
-        public void GetOptionValue_OptionExistsWithoutValue_ReturnsTheValue()
+        public void GetOptionValue_OptionExistsWithoutValue_ThrowsArgumentNullException()
         {
             string option = "--option";
             string[] args = { "--test", option, "--bla2" };
@@ -62,11 +60,48 @@ namespace NuciCLI.UnitTests
         }
 
         [Test]
-        public void GetOptionValue_OptionDoesNotExist_ReturnsTheValue()
+        public void GetOptionValue_OptionDoesNotExist_ThrowsArgumentException()
         {
             string[] args = { "--test", "--bla", "--bla2" };
 
             Assert.Throws<ArgumentException>(() => CliArgumentsReader.GetOptionValue(args, "--hori"));
+        }
+
+        [Test]
+        public void TryGetOptionValue_OptionExistsWithValueAsDifferentArgument_ReturnsTheValue()
+        {
+            string option = "--option";
+            string value = "value";
+            string[] args = { "--test", option, value, "--bla2" };
+
+            Assert.AreEqual(value, CliArgumentsReader.TryGetOptionValue(args, option));
+        }
+
+        [Test]
+        public void TryGetOptionValue_OptionExistsWithValueAsSameArgument_ReturnsTheValue()
+        {
+            string option = "--option";
+            string value = "value";
+            string[] args = { "--test", $"{option}={value}", "--bla2" };
+
+            Assert.AreEqual(value, CliArgumentsReader.TryGetOptionValue(args, option));
+        }
+
+        [Test]
+        public void TryGetOptionValue_OptionExistsWithoutValue_ThrowsArgumentNullException()
+        {
+            string option = "--option";
+            string[] args = { "--test", option, "--bla2" };
+
+            Assert.That(CliArgumentsReader.TryGetOptionValue(args, option), Is.Null);
+        }
+
+        [Test]
+        public void TryGetOptionValue_OptionDoesNotExist_ThrowsArgumentException()
+        {
+            string[] args = { "--test", "--bla", "--bla2" };
+
+            Assert.That(CliArgumentsReader.TryGetOptionValue(args, "--hori"), Is.Null);
         }
     }
 }

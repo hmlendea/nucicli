@@ -37,5 +37,21 @@ namespace NuciCLI
             
             throw new ArgumentException("The specified option is not present in the arguments list");
         }
+
+        public static string TryGetOptionValue(string[] args, params string[] optionVariants)
+        {
+            string value;
+
+            try
+            {
+                value = GetOptionValue(args, optionVariants);
+            }
+            catch
+            {
+                value = null;
+            }
+
+            return value;
+        }
     }
 }
