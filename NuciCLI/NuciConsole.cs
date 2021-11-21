@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace NuciCLI
 {
@@ -180,6 +181,18 @@ namespace NuciCLI
                         NuciConsole.CursorX -= 1;
                         break;
                 }
+            }
+        }
+        
+        /// <summary>
+        /// Writes the lines to the standard output.
+        /// </summary>
+        /// <param name="lines">The lines.</param>
+        public static void WriteLines(IEnumerable<string> lines)
+        {
+            foreach (string line in lines)
+            {
+                WriteLine(line);
             }
         }
 
