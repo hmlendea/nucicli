@@ -8,3 +8,17 @@ NuGet package for easier command-line interface development.
 
  - [NuciCLI](https://github.com/hmlendea/nucicli)
  - [NuciCLI.Menus](https://github.com/hmlendea/nucicli.menus)
+
+# Installation
+
+[![Get it from NuGet](https://raw.githubusercontent.com/hmlendea/readme-assets/master/badges/stores/nuget.png)](https://nuget.org/packages/NuciCLI)
+
+**.NET CLI**:
+```bash
+dotnet add package NuciCLI
+```
+
+**Package Manager**:
+```powershell
+Install-Package NuciCLI
+```
