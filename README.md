@@ -1,4 +1,4 @@
-[![Nuget](https://img.shields.io/nuget/v/NuciCLI.svg?label=NuciCLI)](https://www.nuget.org/packages/NuciCLI/)
+[![Build Status](https://github.com/hmlendea/nucicli/actions/workflows/dotnet.yml/badge.svg)](https://github.com/hmlendea/nucicli/actions/workflows/dotnet.yml)  [![Nuget](https://img.shields.io/nuget/v/NuciCLI.svg?label=NuciCLI)](https://www.nuget.org/packages/NuciCLI/)
 
 # NuciCLI
 
