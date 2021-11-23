@@ -161,7 +161,7 @@ namespace NuciCLI
         }
         
         /// <summary>
-        /// Writes the lines to the standard output.
+        /// Writes multiple lines to the standard output.
         /// </summary>
         /// <param name="lines">The lines.</param>
         public static void WriteLines(IEnumerable<string> lines)
@@ -173,7 +173,7 @@ namespace NuciCLI
         }
         
         /// <summary>
-        /// Writes the lines to the standard output.
+        /// Writes multiple coloured lines to the standard output.
         /// </summary>
         /// <param name="lines">The lines.</param>
         /// <param name="foregroundColour">The text colour for all lines.</param>
@@ -192,14 +192,14 @@ namespace NuciCLI
             => WriteLine(string.Empty);
         
         /// <summary>
-        /// Writes the line to the standard output.
+        /// Writes a coloured line to the standard output.
         /// </summary>
         /// <param name="text">Text.</param>
         public static void WriteLine(string text)
             => Console.WriteLine(text);
         
         /// <summary>
-        /// Writes the line to the standard output.
+        /// Writes a coloured line to the standard output.
         /// </summary>
         /// <param name="text">Text.</param>
         /// <param name="foregroundColour">Foreground colour.</param>
@@ -207,7 +207,7 @@ namespace NuciCLI
             => WriteLine(text, foregroundColour, NuciConsoleColour.Default);
 
         /// <summary>
-        /// Writes the line to the standard output.
+        /// Writes a coloured line to the standard output.
         /// </summary>
         /// <param name="text">Text.</param>
         /// <param name="foregroundColour">Foreground colour.</param>
