@@ -171,6 +171,19 @@ namespace NuciCLI
                 WriteLine(line);
             }
         }
+        
+        /// <summary>
+        /// Writes the lines to the standard output.
+        /// </summary>
+        /// <param name="lines">The lines.</param>
+        /// <param name="foregroundColour">The text colour for all lines.</param>
+        public static void WriteLines(IEnumerable<string> lines, NuciConsoleColour foregroundColour)
+        {
+            foreach (string line in lines)
+            {
+                WriteLine(line, foregroundColour);
+            }
+        }
 
         /// <summary>
         /// Writes an empty line to the standard output.
