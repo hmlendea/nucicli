@@ -47,7 +47,12 @@ namespace NuciCLI
         {
             NuciConsole.Write(prompt);
 
+            bool previousCtrlCBehaviour = Console.TreatControlCAsInput;
+            Console.TreatControlCAsInput = true;
+            
             ConsoleKeyInfo inputValue = Console.ReadKey();
+
+            Console.TreatControlCAsInput = previousCtrlCBehaviour;
 
             return inputValue;
         }
@@ -66,6 +71,9 @@ namespace NuciCLI
             NuciConsole.Write(prompt, foregroundColour, backgroundColour);
             
             string inputValue = string.Empty;
+
+            bool previousCtrlCBehaviour = Console.TreatControlCAsInput;
+            Console.TreatControlCAsInput = true;
 
             ConsoleKeyInfo key = Console.ReadKey(true);
 
@@ -103,6 +111,8 @@ namespace NuciCLI
 
                 key = Console.ReadKey(true);
             }
+
+            Console.TreatControlCAsInput = previousCtrlCBehaviour;
 
             return inputValue;
         }
