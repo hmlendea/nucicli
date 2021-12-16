@@ -279,7 +279,7 @@ namespace NuciCLI
             bool previousCtrlCBehaviour = Console.TreatControlCAsInput;
             Console.TreatControlCAsInput = true;
             
-            ConsoleKeyInfo inputValue = Console.ReadKey();
+            ConsoleKeyInfo inputValue = Console.ReadKey(intercept);
 
             Console.TreatControlCAsInput = previousCtrlCBehaviour;
 
