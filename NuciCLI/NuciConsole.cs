@@ -47,14 +47,7 @@ namespace NuciCLI
         {
             NuciConsole.Write(prompt);
 
-            bool previousCtrlCBehaviour = Console.TreatControlCAsInput;
-            Console.TreatControlCAsInput = true;
-            
-            ConsoleKeyInfo inputValue = Console.ReadKey();
-
-            Console.TreatControlCAsInput = previousCtrlCBehaviour;
-
-            return inputValue;
+            return PerformKeyRead();
         }
         
         public static string ReadLine()
@@ -72,10 +65,7 @@ namespace NuciCLI
             
             string inputValue = string.Empty;
 
-            bool previousCtrlCBehaviour = Console.TreatControlCAsInput;
-            Console.TreatControlCAsInput = true;
-
-            ConsoleKeyInfo key = Console.ReadKey(true);
+            ConsoleKeyInfo key = PerformKeyRead(true);
 
             while (true)
             {
@@ -109,10 +99,8 @@ namespace NuciCLI
                     Console.Write(key.KeyChar);
                 }
 
-                key = Console.ReadKey(true);
+                key = PerformKeyRead(true);
             }
-
-            Console.TreatControlCAsInput = previousCtrlCBehaviour;
 
             return inputValue;
         }
@@ -281,6 +269,21 @@ namespace NuciCLI
             
             Console.ForegroundColor = oldForegroundColour;
             Console.BackgroundColor = oldBackgroundColour;
+        }
+
+        private static ConsoleKeyInfo PerformKeyRead()
+            => PerformKeyRead(false);
+
+        private static ConsoleKeyInfo PerformKeyRead(bool intercept)
+        {
+            bool previousCtrlCBehaviour = Console.TreatControlCAsInput;
+            Console.TreatControlCAsInput = true;
+            
+            ConsoleKeyInfo inputValue = Console.ReadKey();
+
+            Console.TreatControlCAsInput = previousCtrlCBehaviour;
+
+            return inputValue;
         }
     }
 }
