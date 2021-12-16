@@ -45,20 +45,13 @@ namespace NuciCLI
 
         public static ConsoleKeyInfo ReadKey(string prompt, NuciConsoleColour foregroundColour, NuciConsoleColour backgroundColour)
         {
-            NuciConsole.Write(prompt);
+            Write(prompt);
 
-            bool previousCtrlCBehaviour = Console.TreatControlCAsInput;
-            Console.TreatControlCAsInput = true;
-            
-            ConsoleKeyInfo inputValue = Console.ReadKey();
-
-            Console.TreatControlCAsInput = previousCtrlCBehaviour;
-
-            return inputValue;
+            return PerformKeyRead();
         }
         
         public static string ReadLine()
-            => NuciConsole.ReadLine(string.Empty);
+            => ReadLine(string.Empty);
 
         public static string ReadLine(string prompt)
             => ReadLine(prompt, NuciConsoleColour.Default);
@@ -68,35 +61,32 @@ namespace NuciCLI
 
         public static string ReadLine(string prompt, NuciConsoleColour foregroundColour, NuciConsoleColour backgroundColour)
         {
-            NuciConsole.Write(prompt, foregroundColour, backgroundColour);
+            Write(prompt, foregroundColour, backgroundColour);
             
             string inputValue = string.Empty;
 
-            bool previousCtrlCBehaviour = Console.TreatControlCAsInput;
-            Console.TreatControlCAsInput = true;
-
-            ConsoleKeyInfo key = Console.ReadKey(true);
+            ConsoleKeyInfo key = PerformKeyRead(true);
 
             while (true)
             {
                 if (key.Key == ConsoleKey.Escape)
                 {
                     CursorX -= inputValue.Length;
-                    Console.WriteLine(string.Empty.PadRight(inputValue.Length));
+                    WriteLine(string.Empty.PadRight(inputValue.Length));
                     
                     throw new InputCancellationException();
                 }
 
                 if (key.Key == ConsoleKey.Enter)
                 {
-                    Console.WriteLine();
+                    WriteLine();
                     break;
                 }
                 else if (key.Key == ConsoleKey.Backspace && inputValue.Length > 0)
                 {
                     inputValue = inputValue.Substring(0, inputValue.Length - 1);
                     CursorX -= 1;
-                    Console.Write(' ');
+                    Write(" ");
                     CursorX -= 1;
                 }
                 else if (
@@ -109,10 +99,8 @@ namespace NuciCLI
                     Console.Write(key.KeyChar);
                 }
 
-                key = Console.ReadKey(true);
+                key = PerformKeyRead(true);
             }
-
-            Console.TreatControlCAsInput = previousCtrlCBehaviour;
 
             return inputValue;
         }
@@ -152,19 +140,19 @@ namespace NuciCLI
                 switch (inputValue.Key)
                 {
                     case ConsoleKey.Y:
-                        NuciConsole.WriteLine();
+                        WriteLine();
                         return true;
 
                     case ConsoleKey.N:
-                        NuciConsole.WriteLine();
+                        WriteLine();
                         return false;
                     
                     case ConsoleKey.Enter:
-                        NuciConsole.WriteLine();
+                        WriteLine();
                         return defaultValue;
 
                     default:
-                        NuciConsole.CursorX -= 1;
+                        CursorX -= 1;
                         break;
                 }
             }
@@ -281,6 +269,21 @@ namespace NuciCLI
             
             Console.ForegroundColor = oldForegroundColour;
             Console.BackgroundColor = oldBackgroundColour;
+        }
+
+        private static ConsoleKeyInfo PerformKeyRead()
+            => PerformKeyRead(false);
+
+        private static ConsoleKeyInfo PerformKeyRead(bool intercept)
+        {
+            bool previousCtrlCBehaviour = Console.TreatControlCAsInput;
+            Console.TreatControlCAsInput = true;
+            
+            ConsoleKeyInfo inputValue = Console.ReadKey(intercept);
+
+            Console.TreatControlCAsInput = previousCtrlCBehaviour;
+
+            return inputValue;
         }
     }
 }
