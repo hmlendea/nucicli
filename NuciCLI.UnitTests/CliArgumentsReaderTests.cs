@@ -16,7 +16,7 @@ namespace NuciCLI.UnitTests
 
         [Test]
         public void HasOption_OptionDoesNotExist_ReturnsFalse()
-            => Assert.That(CliArgumentsReader.HasOption(["--test", "--bla", "--bla2"], "--hori"));
+            => Assert.That(!CliArgumentsReader.HasOption(["--test", "--bla", "--bla2"], "--hori"));
 
         [Test]
         public void GetOptionValue_OptionExistsWithValueAsDifferentArgument_ReturnsTheValue()
