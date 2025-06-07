@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using NuciExtensions;
 
 namespace NuciCLI
 {
@@ -10,6 +11,11 @@ namespace NuciCLI
 
         public static string GetOptionValue(string[] args, params string[] optionVariants)
         {
+            if (EnumerableExt.IsNullOrEmpty(args))
+            {
+                throw new ArgumentNullException(nameof(args));
+            }
+
             for (int i = 0; i < args.Length; i++)
             {
                 string[] arg = args[i].Split('=');

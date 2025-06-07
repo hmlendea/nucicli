@@ -76,8 +76,8 @@ namespace NuciCLI.UnitTests
             => Assert.That(CliArgumentsReader.GetOptionValue(["--option="], "--option"), Is.EqualTo(""));
 
         [Test]
-        public void GetOptionValue_NullArgs_ThrowsNullReferenceException()
-            => Assert.Throws<NullReferenceException>(() => CliArgumentsReader.GetOptionValue(null, "--option"));
+        public void GetOptionValue_NullArgs_ThrowsArgumentNullException()
+            => Assert.Throws<ArgumentNullException>(() => CliArgumentsReader.GetOptionValue(null, "--option"));
 
         [Test]
         public void GetOptionValue_EmptyOptionString_ThrowsArgumentException()
@@ -123,7 +123,6 @@ namespace NuciCLI.UnitTests
         [Test]
         public void TryGetOptionValue_OptionDoesNotExist_ReturnsNull()
             => Assert.That(CliArgumentsReader.TryGetOptionValue(["--test", "--bla", "--bla2"], "--hori"), Is.Null);
-
 
         [Test]
         public void TryGetOptionValue_OnlyDashesAsOption_ReturnsNull()

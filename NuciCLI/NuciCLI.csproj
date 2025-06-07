@@ -13,4 +13,8 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NuciExtensions" Version="5.0.0" />
+  </ItemGroup>
+
 </Project>
