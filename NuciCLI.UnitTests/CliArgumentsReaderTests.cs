@@ -8,36 +8,24 @@ namespace NuciCLI.UnitTests
     {
         [Test]
         public void HasOption_CalledWithOneVariant_OptionExists_ReturnsTrue()
-        {
-            string[] args = { "--test", "--bla", "--bla2" };
+            => Assert.That(CliArgumentsReader.HasOption(["--test", "--bla", "--bla2"], "--test"));
 
-            Assert.IsTrue(CliArgumentsReader.HasOption(args, "--test"));
-        }
-        
         [Test]
         public void HasOption_CalledWithMultipleVariants_OptionExists_ReturnsTrue()
-        {
-            string[] args = { "--test", "--bla", "--bla2" };
-
-            Assert.IsTrue(CliArgumentsReader.HasOption(args, "-t", "--test"));
-        }
+            => Assert.That(CliArgumentsReader.HasOption(["--test", "--bla", "--bla2"], "-t", "--test"));
 
         [Test]
         public void HasOption_OptionDoesNotExist_ReturnsFalse()
-        {
-            string[] args = { "--test", "--bla", "--bla2" };
-
-            Assert.IsFalse(CliArgumentsReader.HasOption(args, "--hori"));
-        }
+            => Assert.That(!CliArgumentsReader.HasOption(["--test", "--bla", "--bla2"], "--hori"));
 
         [Test]
         public void GetOptionValue_OptionExistsWithValueAsDifferentArgument_ReturnsTheValue()
         {
             string option = "--option";
             string value = "value";
-            string[] args = { "--test", option, value, "--bla2" };
+            string[] args = ["--test", option, value, "--bla2"];
 
-            Assert.AreEqual(value, CliArgumentsReader.GetOptionValue(args, option));
+            Assert.That(CliArgumentsReader.GetOptionValue(args, option), Is.EqualTo(value));
         }
 
         [Test]
@@ -45,36 +33,32 @@ namespace NuciCLI.UnitTests
         {
             string option = "--option";
             string value = "value";
-            string[] args = { "--test", $"{option}={value}", "--bla2" };
+            string[] args = ["--test", $"{option}={value}", "--bla2"];
 
-            Assert.AreEqual(value, CliArgumentsReader.GetOptionValue(args, option));
+            Assert.That(CliArgumentsReader.GetOptionValue(args, option), Is.EqualTo(value));
         }
 
         [Test]
         public void GetOptionValue_OptionExistsWithoutValue_ThrowsArgumentNullException()
         {
             string option = "--option";
-            string[] args = { "--test", option, "--bla2" };
+            string[] args = ["--test", option, "--bla2"];
 
             Assert.Throws<ArgumentNullException>(() => CliArgumentsReader.GetOptionValue(args, option));
         }
 
         [Test]
         public void GetOptionValue_OptionDoesNotExist_ThrowsArgumentException()
-        {
-            string[] args = { "--test", "--bla", "--bla2" };
-
-            Assert.Throws<ArgumentException>(() => CliArgumentsReader.GetOptionValue(args, "--hori"));
-        }
+            => Assert.Throws<ArgumentException>(() => CliArgumentsReader.GetOptionValue(["--test", "--bla", "--bla2"], "--hori"));
 
         [Test]
         public void TryGetOptionValue_OptionExistsWithValueAsDifferentArgument_ReturnsTheValue()
         {
             string option = "--option";
             string value = "value";
-            string[] args = { "--test", option, value, "--bla2" };
+            string[] args = ["--test", option, value, "--bla2"];
 
-            Assert.AreEqual(value, CliArgumentsReader.TryGetOptionValue(args, option));
+            Assert.That(CliArgumentsReader.TryGetOptionValue(args, option), Is.EqualTo(value));
         }
 
         [Test]
@@ -82,26 +66,22 @@ namespace NuciCLI.UnitTests
         {
             string option = "--option";
             string value = "value";
-            string[] args = { "--test", $"{option}={value}", "--bla2" };
+            string[] args = ["--test", $"{option}={value}", "--bla2"];
 
-            Assert.AreEqual(value, CliArgumentsReader.TryGetOptionValue(args, option));
+            Assert.That(CliArgumentsReader.TryGetOptionValue(args, option), Is.EqualTo(value));
         }
 
         [Test]
         public void TryGetOptionValue_OptionExistsWithoutValue_ThrowsArgumentNullException()
         {
             string option = "--option";
-            string[] args = { "--test", option, "--bla2" };
+            string[] args = ["--test", option, "--bla2"];
 
             Assert.That(CliArgumentsReader.TryGetOptionValue(args, option), Is.Null);
         }
 
         [Test]
         public void TryGetOptionValue_OptionDoesNotExist_ThrowsArgumentException()
-        {
-            string[] args = { "--test", "--bla", "--bla2" };
-
-            Assert.That(CliArgumentsReader.TryGetOptionValue(args, "--hori"), Is.Null);
-        }
+            => Assert.That(CliArgumentsReader.TryGetOptionValue(["--test", "--bla", "--bla2"], "--hori"), Is.Null);
     }
 }

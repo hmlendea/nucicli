@@ -6,9 +6,7 @@ namespace NuciCLI
     public static class CliArgumentsReader
     {
         public static bool HasOption(string[] args, params string[] optionVariants)
-        {
-            return optionVariants.Any(args.Contains);
-        }
+            => optionVariants.Any(args.Contains);
 
         public static string GetOptionValue(string[] args, params string[] optionVariants)
         {
@@ -20,13 +18,13 @@ namespace NuciCLI
 
                 if (optionVariants.Contains(argName))
                 {
-                    if (!(argValue is null))
+                    if (argValue is not null)
                     {
                         return argValue;
                     }
 
                     if (i + 1 >= args.Length ||
-                        args[i + 1].StartsWith("-"))
+                        args[i + 1].StartsWith('-'))
                     {
                         throw new ArgumentNullException($"The value for the '{argName}' option argument is missing");
                     }
@@ -34,24 +32,20 @@ namespace NuciCLI
                     return args[i + 1];
                 }
             }
-            
+
             throw new ArgumentException("The specified option is not present in the arguments list");
         }
 
         public static string TryGetOptionValue(string[] args, params string[] optionVariants)
         {
-            string value;
-
             try
             {
-                value = GetOptionValue(args, optionVariants);
+                return GetOptionValue(args, optionVariants);
             }
             catch
             {
-                value = null;
+                return null;
             }
-
-            return value;
         }
     }
 }
