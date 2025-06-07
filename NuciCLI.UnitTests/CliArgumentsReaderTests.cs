@@ -15,6 +15,10 @@ namespace NuciCLI.UnitTests
             => Assert.That(CliArgumentsReader.HasOption(["--test", "--bla", "--bla2"], "-t", "--test"));
 
         [Test]
+        public void HasOption_CalledWithNullArgs_OptionExists_ReturnsFalse()
+            => Assert.That(!CliArgumentsReader.HasOption(null, "--test"));
+
+        [Test]
         public void HasOption_CalledWithEmptyArgs_ReturnsFalse()
             => Assert.That(!CliArgumentsReader.HasOption([], "--test"));
 
@@ -29,6 +33,10 @@ namespace NuciCLI.UnitTests
         [Test]
         public void HasOption_CalledWithNullOption_ThrowsException()
             => Assert.Throws<ArgumentNullException>(() => CliArgumentsReader.HasOption(["--test"], null));
+
+        [Test]
+        public void HasOption_CalledWithEmptyOptionsCollection_ThrowsException()
+            => Assert.Throws<ArgumentNullException>(() => CliArgumentsReader.HasOption(["--test"], []));
 
         [Test]
         public void GetOptionValue_OptionExistsWithValueAsDifferentArgument_ReturnsTheValue()

@@ -7,7 +7,19 @@ namespace NuciCLI
     public static class CliArgumentsReader
     {
         public static bool HasOption(string[] args, params string[] optionVariants)
-            => optionVariants.Any(args.Contains);
+        {
+            if (EnumerableExt.IsNullOrEmpty(optionVariants))
+            {
+                throw new ArgumentNullException(nameof(optionVariants));
+            }
+
+            if (EnumerableExt.IsNullOrEmpty(args))
+            {
+                return false;
+            }
+
+            return optionVariants.Any(args.Contains);
+        }
 
         public static string GetOptionValue(string[] args, params string[] optionVariants)
         {
