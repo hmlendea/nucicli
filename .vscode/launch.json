@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/NuciCLI.UnitTests/bin/Debug/netcoreapp2.2/NuciCLI.UnitTests.dll",
+            "program": "${workspaceFolder}/NuciCLI.UnitTests/bin/Debug/net9.0/NuciCLI.UnitTests.dll",
             "args": [],
             "cwd": "${workspaceFolder}/NuciCLI.UnitTests",
             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
