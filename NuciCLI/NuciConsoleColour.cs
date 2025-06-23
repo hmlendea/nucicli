@@ -4,13 +4,26 @@ namespace NuciCLI
 {
     public sealed class NuciConsoleColour
     {
+        /// <summary>
+        /// The numerical code of the colour.
+        /// </summary>
         public int Value { get; set; }
 
+        /// <summary>
+        /// Represents the console colour as a nullable ConsoleColor.
+        /// </summary>
         public ConsoleColor? ConsoleColour { get; set; }
 
+        /// <summary>
+        /// The name of the colour.
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Represents the default console colour.
+        /// </summary>
         public static NuciConsoleColour Default => new(-1, nameof(Default));
+
         public static NuciConsoleColour Black => new(0, nameof(Black));
         public static NuciConsoleColour DarkBlue => new(1, nameof(DarkBlue));
         public static NuciConsoleColour DarkGreen => new(2, nameof(DarkGreen));
