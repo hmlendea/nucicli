@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <RootNamespace>NuciCLI</RootNamespace>
-    <Version>2.0.0</Version>
+    <Version>2.0.1</Version>
     <Description>NuciCLI core</Description>
     <Authors>Horațiu Mlendea</Authors>
     <Copyright>Copyright 2025 © Horațiu Mlendea</Copyright>
