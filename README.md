@@ -7,6 +7,7 @@ NuGet package for easier command-line interface development.
 # NuciCLI
 
  - [NuciCLI](https://github.com/hmlendea/nucicli)
+ - [NuciCLI.Arguments](https://github.com/hmlendea/nucicli.arguments)
  - [NuciCLI.Menus](https://github.com/hmlendea/nucicli.menus)
 
 # Installation
