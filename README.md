@@ -135,6 +135,10 @@ See the [contributing guidelines](./CONTRIBUTING.md) for details on how to repor
 
 See the [Code of Conduct](CODE_OF_CONDUCT.md) for the standards of conduct expected in all project spaces.
 
+## 🛡️ Privacy and Data
+
+NuciCLI does not collect, process, transmit, or persist any personal data. For the detailed description of how the library handles privacy and personal data, see [PRIVACY.md](./PRIVACY.md).
+
 ## 📄 License
 
 This project is being distributed under the `GNU General Public License v3.0` or later.
