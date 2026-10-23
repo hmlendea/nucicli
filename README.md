@@ -115,6 +115,27 @@ The NuciCLI ecosystem is split into focused packages:
 
 The current package targets `.NET 10`.
 
-## License
+## 🤝 Contributing
 
-This project is licensed under the `GNU General Public License v3.0` or later. See [LICENSE](./LICENSE) for details.
+You are welcome to submit any suggestion, feedback, or modification to this project.
+
+When doing so, please:
+- Maintain cross-platform compatibility
+- Preserve the existing public contract unless a breaking change is intentional
+- Submit focused pull requests that conform to the existing code style
+- Maintain your branch synchronised with `master`
+- Revise the documentation when functionality changes
+- Properly test all modifications, including edge cases and error conditions
+- Include tests for additional or modified functionality
+- Raise a new [issue](https://github.com/hmlendea/nucicli/issues) for problems or suggestions
+
+See the [contributing guidelines](./CONTRIBUTING.md) for details on how to report issues, suggest enhancements, and submit changes.
+
+## 📜 Code of Conduct
+
+See the [Code of Conduct](CODE_OF_CONDUCT.md) for the standards of conduct expected in all project spaces.
+
+## 📄 License
+
+This project is being distributed under the `GNU General Public License v3.0` or later.
+See [LICENSE](./LICENSE) for additional information.
