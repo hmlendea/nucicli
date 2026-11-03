@@ -93,6 +93,10 @@ dotnet test NuciCLI.UnitTests/NuciCLI.UnitTests.csproj --no-build --verbosity no
 - Follow the documentation style guide.
 - Preview changes locally if possible.
 
+## 🔒 Security
+
+See the [Security Policy](SECURITY.md) for supported versions, vulnerability reporting, and disclosure practices.
+
 ## 📋 Code of Conduct
 
 This project follows the [Code of Conduct](CODE_OF_CONDUCT.md).
