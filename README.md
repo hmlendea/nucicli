@@ -139,6 +139,27 @@ See the [Security Policy](SECURITY.md) for supported versions, vulnerability rep
 
 See the [Architecture Documentation](ARCHITECTURE.md) for the system context, architectural style, runtime flow, components, architectural areas, interfaces, cross-cutting concerns, dependency rules, external dependencies, deployment model, compatibility contracts, testing strategy, design constraints, and source map.
 
+## 📚 Documentation
+
+Comprehensive documentation is available in the [`docs/`](./docs/) directory:
+
+- [Documentation Index](./docs/INDEX.md) — Master index with navigation
+- [Architecture Deep Dive](./docs/architecture.md) — Detailed architecture
+- [Design Decisions](./docs/design-decisions.md) — Rationale for key choices
+- [Repository Overview](./docs/repository-overview.md) — Purpose and scope
+- [Repository Structure](./docs/repository-structure.md) — Source tree and modules
+- [Components](./docs/components/) — Per-component deep dives
+- [Flows](./docs/flows/) — End-to-end execution flows
+- [Behaviour](./docs/behaviour/) — User-facing behaviours
+- [API Reference](./docs/api-reference/) — Complete API reference
+- [API Usage Examples](./docs/api-usage-examples.md) — Practical patterns
+- [Quick Start](./docs/quick-start.md) — Getting started guide
+- [Testing](./docs/testing.md) — Test strategy and organization
+- [Error Handling](./docs/error-handling.md) — Error taxonomy and patterns
+- [Security](./docs/security.md) — Implementation-level security details
+- [Troubleshooting](./docs/troubleshooting.md) — Common issues and solutions
+- [FAQ](./docs/faq.md) — Frequently asked questions
+
 ## 📜 Code of Conduct
 
 See the [Code of Conduct](CODE_OF_CONDUCT.md) for the standards of conduct expected in all project spaces.
