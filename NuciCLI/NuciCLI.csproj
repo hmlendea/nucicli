@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>NuciCLI</RootNamespace>
-    <Version>3.0.2</Version>
+    <Version>3.0.3</Version>
     <Description>Lightweight library for building interactive command-line applications.</Description>
     <Authors>Horațiu Mlendea</Authors>
     <Copyright>Copyright 2026 © Horațiu Mlendea</Copyright>
