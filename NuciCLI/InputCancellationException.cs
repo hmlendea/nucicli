@@ -3,7 +3,7 @@ using System;
 namespace NuciCLI
 {
     /// <summary>
-    /// Duplicate entity exception.
+    /// Signals that the user cancelled console input.
     /// </summary>
     public class InputCancellationException : Exception
     {

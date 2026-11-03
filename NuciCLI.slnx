@@ -1,5 +1,5 @@
 <Solution>
   <Project Path="NuciCLI/NuciCLI.csproj" />
-  <Project Path="NuciCLI.UnitTests/NuciCLI.UnitTests.csproj" />
   <Project Path="NuciCLI.ArchitectureTests/NuciCLI.ArchitectureTests.csproj" />
+  <Project Path="NuciCLI.UnitTests/NuciCLI.UnitTests.csproj" />
 </Solution>

@@ -2,6 +2,9 @@ using System;
 
 namespace NuciCLI
 {
+    /// <summary>
+    /// Describes a mutable console colour with a numerical value and name.
+    /// </summary>
     public sealed class NuciConsoleColour
     {
         /// <summary>
@@ -41,7 +44,7 @@ namespace NuciCLI
         public static NuciConsoleColour Yellow => new(14, nameof(Yellow));
         public static NuciConsoleColour White => new(15, nameof(White));
 
-        NuciConsoleColour(int value, string name)
+        private NuciConsoleColour(int value, string name)
         {
             Value = value;
             Name = name;

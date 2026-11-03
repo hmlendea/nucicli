@@ -109,7 +109,7 @@ namespace NuciCLI
         /// <summary>
         /// Reads a line of input from the standard input with a prompt, displaying the prompt in the specified foreground and background colours.
         /// </summary>
-        /// <param name="proxmpt">The prompt to display before reading the line.</param>
+        /// <param name="prompt">The prompt to display before reading the line.</param>
         /// <param name="foregroundColour">The text colour for the prompt.</param>
         /// <param name="backgroundColour">The background colour for the prompt.</param>
         /// <returns>The input string entered by the user.</returns>
@@ -118,46 +118,7 @@ namespace NuciCLI
         {
             Write(prompt, foregroundColour, backgroundColour);
 
-            string inputValue = string.Empty;
-
-            ConsoleKeyInfo key = PerformKeyRead(true);
-
-            while (true)
-            {
-                if (key.Key.Equals(ConsoleKey.Escape))
-                {
-                    CursorX -= inputValue.Length;
-                    WriteLine(string.Empty.PadRight(inputValue.Length));
-
-                    throw new InputCancellationException();
-                }
-
-                if (key.Key.Equals(ConsoleKey.Enter))
-                {
-                    WriteLine();
-                    break;
-                }
-                else if (key.Key.Equals(ConsoleKey.Backspace) && !string.IsNullOrEmpty(inputValue))
-                {
-                    inputValue = inputValue[..^1];
-                    CursorX -= 1;
-                    Write(" ");
-                    CursorX -= 1;
-                }
-                else if (
-                    char.IsLetterOrDigit(key.KeyChar) ||
-                    char.IsSymbol(key.KeyChar) ||
-                    char.IsPunctuation(key.KeyChar) ||
-                    char.IsWhiteSpace(key.KeyChar))
-                {
-                    inputValue += key.KeyChar;
-                    Console.Write(key.KeyChar);
-                }
-
-                key = PerformKeyRead(true);
-            }
-
-            return inputValue;
+            return ReadInputLine();
         }
 
         /// <summary>
@@ -365,17 +326,76 @@ namespace NuciCLI
             Console.BackgroundColor = oldBackgroundColour;
         }
 
+        private static string ReadInputLine()
+        {
+            string inputValue = string.Empty;
+
+            while (true)
+            {
+                ConsoleKeyInfo key = PerformKeyRead(true);
+
+                if (Equals(key.Key, ConsoleKey.Escape))
+                {
+                    CancelInput(inputValue);
+                }
+
+                if (Equals(key.Key, ConsoleKey.Enter))
+                {
+                    WriteLine();
+
+                    return inputValue;
+                }
+
+                inputValue = ProcessInputKey(inputValue, key);
+            }
+        }
+
+        private static void CancelInput(string inputValue)
+        {
+            CursorX -= inputValue.Length;
+            WriteLine(string.Empty.PadRight(inputValue.Length));
+
+            throw new InputCancellationException();
+        }
+
+        private static string ProcessInputKey(string inputValue, ConsoleKeyInfo key)
+        {
+            if (Equals(key.Key, ConsoleKey.Backspace) && !string.IsNullOrEmpty(inputValue))
+            {
+                CursorX -= 1;
+                Write(" ");
+                CursorX -= 1;
+
+                return inputValue[..^1];
+            }
+
+            if (IsInputCharacter(key.KeyChar))
+            {
+                Console.Write(key.KeyChar);
+
+                return inputValue + key.KeyChar;
+            }
+
+            return inputValue;
+        }
+
+        private static bool IsInputCharacter(char character) =>
+            char.IsLetterOrDigit(character) ||
+            char.IsSymbol(character) ||
+            char.IsPunctuation(character) ||
+            char.IsWhiteSpace(character);
+
         private static ConsoleKeyInfo PerformKeyRead()
             => PerformKeyRead(false);
 
         private static ConsoleKeyInfo PerformKeyRead(bool intercept)
         {
-            bool previousCtrlCBehaviour = Console.TreatControlCAsInput;
+            bool wasControlCTreatedAsInput = Console.TreatControlCAsInput;
             Console.TreatControlCAsInput = true;
 
             ConsoleKeyInfo inputValue = Console.ReadKey(intercept);
 
-            Console.TreatControlCAsInput = previousCtrlCBehaviour;
+            Console.TreatControlCAsInput = wasControlCTreatedAsInput;
 
             return inputValue;
         }
