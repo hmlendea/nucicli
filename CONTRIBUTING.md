@@ -97,6 +97,10 @@ dotnet test NuciCLI.UnitTests/NuciCLI.UnitTests.csproj --no-build --verbosity no
 
 See the [Security Policy](SECURITY.md) for supported versions, vulnerability reporting, and disclosure practices.
 
+## 🏗️ Architecture
+
+See the [Architecture Documentation](ARCHITECTURE.md) for the system context, architectural style, runtime flow, components, architectural areas, interfaces, cross-cutting concerns, dependency rules, external dependencies, deployment model, compatibility contracts, testing strategy, design constraints, and source map.
+
 ## 📋 Code of Conduct
 
 This project follows the [Code of Conduct](CODE_OF_CONDUCT.md).
