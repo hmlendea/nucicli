@@ -1,119 +1,180 @@
-[![Donate](https://img.shields.io/badge/-%E2%99%A5%20Donate-%23ff69b4)](https://hmlendea.go.ro/fund.html) [![Build Status](https://github.com/hmlendea/nucicli/actions/workflows/dotnet.yml/badge.svg)](https://github.com/hmlendea/nucicli/actions/workflows/dotnet.yml) [![Latest GitHub release](https://img.shields.io/github/v/release/hmlendea/nucicli)](https://github.com/hmlendea/nucicli/releases/latest)
+[![Latest Release](https://img.shields.io/github/v/release/hmlendea/nucicli)](https://github.com/hmlendea/nucicli/releases/latest)
+[![Build Status](https://github.com/hmlendea/nucicli/actions/workflows/dotnet.yml/badge.svg)](https://github.com/hmlendea/nucicli/actions/workflows/dotnet.yml)
+[![NuGet](https://img.shields.io/nuget/v/NuciCLI)](https://nuget.org/packages/NuciCLI)
+[![License](https://img.shields.io/github/license/hmlendea/nucicli)](https://github.com/hmlendea/nucicli/blob/master/LICENSE)
 
 # NuciCLI
 
-## About
-
 NuciCLI is a lightweight .NET library for building interactive command-line applications.
-It wraps common console operations behind a small, focused API for:
 
-- reading text input with prompts
-- reading single-key input
-- asking yes or no questions
-- writing coloured console output
-- working with console cursor and buffer dimensions
+## 📑 Table of Contents
 
-The package is intentionally small and works well as a base layer for richer CLI tooling.
+- [Capabilities](#capabilities)
+- [Usage](#usage)
+- [Compatibility](#compatibility)
+- [Installation](#installation)
+  - [Package Manager Installation](#package-manager-installation)
+- [Development](#development)
+  - [Requirements](#requirements)
+  - [Setup](#setup)
+  - [Build](#build)
+  - [Test](#test)
+  - [Continuous Integration](#continuous-integration)
+  - [Dependencies](#dependencies)
+- [GitHub Actions](#github-actions)
+- [Project Structure](#project-structure)
+  - [Projects and Packages](#projects-and-packages)
+  - [Directories](#directories)
+- [Architecture](#architecture)
+- [Documentation](#documentation)
+- [API Reference](#api-reference)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [Code of Conduct](#code-of-conduct)
+- [Related Projects](#related-projects)
+- [Privacy and Data](#privacy-and-data)
+- [Security](#security)
+- [Project Engagement](#project-engagement)
+- [License](#license)
 
-## Features
+## ✨ Capabilities
 
-- Prompted line input through `NuciConsole.ReadLine(...)`
-- Prompted key input through `NuciConsole.ReadKey(...)`
-- Confirmation prompts through `NuciConsole.ReadPermission(...)`
-- Coloured output through `NuciConsole.Write(...)`, `WriteLine(...)`, and `WriteLines(...)`
-- Access to cursor position and console dimensions through `CursorX`, `CursorY`, `Width`, and `Height`
-- Explicit cancellation flow through `InputCancellationException` when text input is aborted with `Escape`
+- Read prompted text and single-key input from the console.
+- Ask yes or no questions with configurable defaults.
+- Write plain and coloured console output.
+- Read or set cursor position and console dimensions.
+- Handle cancelled text input through `InputCancellationException`.
 
-## Installation
+## 🚀 Usage
 
-[![Get it from NuGet](https://raw.githubusercontent.com/hmlendea/readme-assets/master/badges/stores/nuget.png)](https://nuget.org/packages/NuciCLI)
+```csharp
+using NuciCLI;
 
-### .NET CLI
+string name = NuciConsole.ReadLine("Name: ", NuciConsoleColour.Yellow);
+bool proceed = NuciConsole.ReadPermission($"Continue as {name}?", defaultValue: true);
+
+if (proceed)
+{
+\tNuciConsole.WriteLine("Starting...", NuciConsoleColour.Green);
+}
+```
+
+## 🧩 Compatibility
+
+| Component | Supported Versions | Notes |
+|-----------|--------------------|-------|
+| .NET | 10 | The package targets `net10.0`. |
+
+## 📦 Installation
+
+[![Obtain it from NuGet](https://raw.githubusercontent.com/hmlendea/readme-assets/master/badges/stores/nuget.png)](https://nuget.org/packages/NuciCLI)
+
+### Package Manager Installation
 
 ```bash
 dotnet add package NuciCLI
 ```
 
-### Package Manager
-
+Or, via the `Package Manager Console`:
 ```powershell
 Install-Package NuciCLI
 ```
 
-## Quick Start
+## 🛠️ Development
 
-```csharp
-using NuciCLI;
+### Requirements
 
-NuciConsole.WriteLine("NuciCLI demo", NuciConsoleColour.Cyan);
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
+- Git
 
-try
-{
-	string name = NuciConsole.ReadLine("Name: ", NuciConsoleColour.Yellow);
-	bool proceed = NuciConsole.ReadPermission($"Continue as {name}?", defaultValue: true);
+### Setup
 
-	if (proceed)
-	{
-		NuciConsole.WriteLine("Starting...", NuciConsoleColour.Green);
-	}
-	else
-	{
-		NuciConsole.WriteLine("Cancelled.", NuciConsoleColour.Red);
-	}
-}
-catch (InputCancellationException)
-{
-	NuciConsole.WriteLine("Input cancelled by user.", NuciConsoleColour.DarkYellow);
-}
+```bash
+git clone https://github.com/hmlendea/nucicli.git
+cd nucicli
+dotnet restore
 ```
 
-## API Overview
+### Build
 
-### `NuciConsole`
+```bash
+dotnet build --no-restore
+```
 
-The main entry point for console interaction.
+### Test
 
-Common members include:
+```bash
+dotnet test --no-build --verbosity normal
+```
 
-- `ReadLine(...)` for reading text input
-- `ReadKey(...)` for reading a single key press
-- `ReadPermission(...)` for yes or no confirmation prompts
-- `Write(...)`, `WriteLine(...)`, and `WriteLines(...)` for output
-- `CursorX` and `CursorY` for reading or setting cursor position
-- `Width`, `Height`, `Area`, and `CursorSize` for console information
+### Continuous Integration
 
-### `NuciConsoleColour`
+The `.NET` workflow restores dependencies, builds the solution, and runs tests on pushes and pull requests targeting `master`.
 
-Provides named colour values that map to `ConsoleColor`, including:
+### Dependencies
 
-- `Default`
-- `Black`, `DarkBlue`, `DarkGreen`, `DarkCyan`
-- `DarkRed`, `DarkMagenta`, `DarkYellow`, `Gray`
-- `DarkGray`, `Blue`, `Green`, `Cyan`
-- `Red`, `Magenta`, `Yellow`, `White`
+| Package | Version | Scope | Purpose |
+|---------|---------|-------|---------|
+| `NuciExtensions` | `6.0.2` | Runtime | Provides the library's direct .NET dependency. |
 
-### `InputCancellationException`
+## ⚙️ GitHub Actions
 
-Thrown by `ReadLine(...)` when the user cancels input with the `Escape` key.
+| Workflow | Purpose | What it does |
+|----------|---------|--------------|
+| [.NET](https://github.com/hmlendea/nucicli/blob/master/.github/workflows/dotnet.yml) | Continuous validation | Restores dependencies, builds the solution, and runs tests. |
+| [GitHub Release](https://github.com/hmlendea/nucicli/blob/master/.github/workflows/github-release.yml) | GitHub package release | Packs the project, calculates a SHA256 checksum, and uploads the package to the GitHub Release. |
+| [NuGet.org Release](https://github.com/hmlendea/nucicli/blob/master/.github/workflows/nuget-release.yml) | NuGet publication | Packs the project and publishes it to NuGet.org using OIDC authentication. |
 
-## Behaviour Notes
+## 🗂️ Project Structure
 
-- `ReadPermission(...)` accepts `Y`, `N`, or `Enter`.
-- `ReadPermission(...)` uses the supplied default value when `Enter` is pressed without choosing an option.
-- `ReadKey(...)` reads from the console without echoing the pressed key.
-- `ReadLine(...)` supports interactive editing with backspace and allows the caller to handle cancellation explicitly.
+The repository contains the library, unit tests, architecture tests, and supporting documentation.
 
-## Related Packages
+### Projects and Packages
 
-The NuciCLI ecosystem is split into focused packages:
+| Project | Type | Purpose |
+|---------|------|---------|
+| `NuciCLI/` | .NET library | Provides the public console interaction API. |
+| `NuciCLI.UnitTests/` | Test project | Tests library behaviour. |
+| `NuciCLI.ArchitectureTests/` | Test project | Verifies architectural and source conventions. |
 
-- [NuciCLI](https://github.com/hmlendea/nucicli) for core console helpers
-- [NuciCLI.Arguments](https://github.com/hmlendea/nucicli.arguments) for command-line argument handling
-- [NuciCLI.Menus](https://github.com/hmlendea/nucicli.menus) for interactive terminal menus
+### Directories
 
-## Target Framework
+| Directory | Purpose |
+|-----------|---------|
+| `docs/` | Detailed architecture, behaviour, API, testing, and maintenance documentation. |
+| `.github/workflows/` | Continuous integration and release workflows. |
 
-The current package targets `.NET 10`.
+## 🏗️ Architecture
+
+NuciCLI is a lightweight .NET library for building interactive command-line applications.
+
+See the [architecture documentation](./ARCHITECTURE.md) for the system context, principal components, runtime flows, ownership boundaries, dependencies, constraints, and extension points.
+
+## 📚 Documentation
+
+The `docs/` directory contains the repository documentation:
+
+| Resource | Description |
+|----------|-------------|
+| [Documentation Index](./docs/INDEX.md) | Master index with navigation. |
+| [Quick Start](./docs/quick-start.md) | Getting started guide. |
+| [API Usage Examples](./docs/api-usage-examples.md) | Practical usage patterns. |
+| [Behaviour](./docs/behaviour/) | User-facing behaviour documentation. |
+| [Components](./docs/components/) | Component deep dives. |
+| [Flows](./docs/flows/) | End-to-end execution flows. |
+| [Testing](./docs/testing.md) | Test strategy and organisation. |
+| [Troubleshooting](./docs/troubleshooting.md) | Common issues and resolutions. |
+| [FAQ](./docs/faq.md) | Frequently asked questions. |
+
+## 🌐 API Reference
+
+The [API Reference](./docs/api-reference/INDEX.md) documents the public `NuciConsole` and `NuciConsoleColour` APIs.
+
+## 🩺 Troubleshooting
+
+| Symptom | Probable Cause | Resolution |
+|---------|----------------|------------|
+| Input is cancelled unexpectedly | `Escape` was pressed during `ReadLine(...)`. | Catch `InputCancellationException` when cancellation should be handled by the calling application. |
 
 ## 🤝 Contributing
 
@@ -131,42 +192,33 @@ When doing so, please:
 
 See the [contributing guidelines](./CONTRIBUTING.md) for details on how to report issues, suggest enhancements, and submit changes.
 
-## 🔒 Security
-
-See the [Security Policy](SECURITY.md) for supported versions, vulnerability reporting, and disclosure practices.
-
-## 🏗️ Architecture
-
-See the [Architecture Documentation](ARCHITECTURE.md) for the system context, architectural style, runtime flow, components, architectural areas, interfaces, cross-cutting concerns, dependency rules, external dependencies, deployment model, compatibility contracts, testing strategy, design constraints, and source map.
-
-## 📚 Documentation
-
-Comprehensive documentation is available in the [`docs/`](./docs/) directory:
-
-- [Documentation Index](./docs/INDEX.md) — Master index with navigation
-- [Architecture Deep Dive](./docs/architecture.md) — Detailed architecture
-- [Design Decisions](./docs/design-decisions.md) — Rationale for key choices
-- [Repository Overview](./docs/repository-overview.md) — Purpose and scope
-- [Repository Structure](./docs/repository-structure.md) — Source tree and modules
-- [Components](./docs/components/) — Per-component deep dives
-- [Flows](./docs/flows/) — End-to-end execution flows
-- [Behaviour](./docs/behaviour/) — User-facing behaviours
-- [API Reference](./docs/api-reference/) — Complete API reference
-- [API Usage Examples](./docs/api-usage-examples.md) — Practical patterns
-- [Quick Start](./docs/quick-start.md) — Getting started guide
-- [Testing](./docs/testing.md) — Test strategy and organization
-- [Error Handling](./docs/error-handling.md) — Error taxonomy and patterns
-- [Security](./docs/security.md) — Implementation-level security details
-- [Troubleshooting](./docs/troubleshooting.md) — Common issues and solutions
-- [FAQ](./docs/faq.md) — Frequently asked questions
-
 ## 📜 Code of Conduct
 
-See the [Code of Conduct](CODE_OF_CONDUCT.md) for the standards of conduct expected in all project spaces.
+See the [Code of Conduct](./CODE_OF_CONDUCT.md) for the standards of conduct expected in all project spaces.
+
+## 🔗 Related Projects
+
+- [NuciCLI.Arguments](https://github.com/hmlendea/nucicli.arguments): Command-line argument handling.
+- [NuciCLI.Menus](https://github.com/hmlendea/nucicli.menus): Interactive terminal menus.
 
 ## 🛡️ Privacy and Data
 
-NuciCLI does not collect, process, transmit, or persist any personal data. For the detailed description of how the library handles privacy and personal data, see [PRIVACY.md](./PRIVACY.md).
+NuciCLI does not collect, process, transmit, or persist any personal data.
+For the detailed description of how the application handles privacy and personal data, see [PRIVACY.md](./PRIVACY.md).
+
+NuciCLI processes only the console input and output explicitly provided by the calling application. It does not process personal data for any purpose.
+
+## 🔒 Security
+
+NuciCLI follows the security practices documented in [SECURITY.md](./SECURITY.md).
+
+For information on reporting security vulnerabilities, see [SECURITY.md](./SECURITY.md).
+
+## 💝 Project Engagement
+
+Discovered a problem or have a suggestion? [Open an issue](https://github.com/hmlendea/nucicli/issues)!
+
+If you find this project useful, consider starring ⭐️ it on GitHub!
 
 ## 📄 License
 
