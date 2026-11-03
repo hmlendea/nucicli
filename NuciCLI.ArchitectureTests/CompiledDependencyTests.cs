@@ -1,6 +1,8 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using ArchUnitNet;
 using NUnit.Framework;
 
@@ -45,16 +47,18 @@ namespace NuciCLI.ArchitectureTests
         }
 
         [Test]
-        public async Task GivenProductionProject_WhenChecked_ThenItHasNoTestProjectFiles()
+        public void GivenProductionProject_WhenChecked_ThenItHasNoTestProjectReferences()
         {
-            var violations = await ArchUnit.ProjectFiles(ProductionArchitecture.ProjectFile)
-                .InPath("*.cs")
-                .ShouldNot()
-                .DependOnFiles()
-                .InFolder("unit-tests")
-                .CheckAsync();
+            XDocument project = XDocument.Load(ProductionArchitecture.ProjectFile);
+            string[] projectReferences = project
+                .Descendants("ProjectReference")
+                .Select(reference => (string?)reference.Attribute("Include") ?? string.Empty)
+                .ToArray();
 
-            Assert.That(violations, Is.Empty, "Production source must not depend on test project files.");
+            Assert.That(
+                projectReferences,
+                Has.None.Matches<string>(reference => reference.Contains("Test", StringComparison.OrdinalIgnoreCase)),
+                "The production project must not reference test projects.");
         }
 
         [Test]
