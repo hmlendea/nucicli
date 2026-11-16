@@ -31,11 +31,13 @@ namespace NuciCLI.UnitTests
         }
 
         [Test]
-        public static void GivenCursorXBounded_WhenAssigned_ThenTheAssignmentSucceeds()
+        public static void GivenAnInBoundsCursorX_WhenAssigned_ThenItMatchesTheEquivalentConsoleCall()
         {
-            NuciConsole.CursorX = NuciConsole.Width - 1;
+            int value = NuciConsole.Width - 1;
 
-            Assert.That(NuciConsole.CursorX, Is.GreaterThanOrEqualTo(0));
+            AssertMatchesConsoleOutcome(
+                () => Console.SetCursorPosition(value, Console.CursorTop),
+                () => NuciConsole.CursorX = value);
         }
 
         [TestCase(-1)]
@@ -46,12 +48,13 @@ namespace NuciCLI.UnitTests
                 Throws.TypeOf<ArgumentOutOfRangeException>());
 
         [Test]
-        public static void GivenCursorYBounded_WhenAssigned_ThenTheAssignmentSucceeds()
+        public static void GivenAnInBoundsCursorY_WhenAssigned_ThenItMatchesTheEquivalentConsoleCall()
         {
-            NuciConsole.CursorX = 0;
-            NuciConsole.CursorY = NuciConsole.Height - 1;
+            int value = NuciConsole.Height - 1;
 
-            Assert.That(NuciConsole.CursorY, Is.GreaterThanOrEqualTo(0));
+            AssertMatchesConsoleOutcome(
+                () => Console.SetCursorPosition(Console.CursorLeft, value),
+                () => NuciConsole.CursorY = value);
         }
 
         [TestCase(-1)]
@@ -476,6 +479,35 @@ namespace NuciCLI.UnitTests
             Console.ResetColor();
 
             return Console.ForegroundColor;
+        }
+
+        private static void AssertMatchesConsoleOutcome(Action consoleAction, Action subjectAction)
+        {
+            Exception? expectedException = CaptureException(consoleAction);
+            Exception? actualException = CaptureException(subjectAction);
+
+            if (expectedException is null)
+            {
+                Assert.That(actualException, Is.Null);
+                return;
+            }
+
+            Assert.That(actualException, Is.Not.Null);
+            Assert.That(actualException!.GetType(), Is.EqualTo(expectedException.GetType()));
+        }
+
+        private static Exception? CaptureException(Action action)
+        {
+            try
+            {
+                action();
+
+                return null;
+            }
+            catch (Exception exception)
+            {
+                return exception;
+            }
         }
 
         private static List<string> BuildLines()
