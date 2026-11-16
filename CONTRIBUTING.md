@@ -4,7 +4,7 @@ This document covers the guidelines and processes for contributing to this proje
 
 ## 📑 Table of Contents
 
-- [How to Contribute](#-how-to-contribute)
+- [Contributing](#-contributing)
   - [Reporting Issues](#reporting-issues)
   - [Suggesting Enhancements](#suggesting-enhancements)
   - [Code Contributions](#code-contributions)
@@ -16,10 +16,12 @@ This document covers the guidelines and processes for contributing to this proje
   - [Testing](#testing)
   - [Documentation](#documentation)
 - [Code of Conduct](#-code-of-conduct)
+- [Security](#-security)
+- [Architecture](#-architecture)
 - [License](#-license)
 - [Getting Assistance](#-getting-assistance)
 
-## 🤝 How to Contribute
+## 🤝 Contributing
 
 ### Reporting Issues
 
@@ -95,7 +97,7 @@ dotnet test NuciCLI.UnitTests/NuciCLI.UnitTests.csproj --no-build --verbosity no
 
 ## 🔒 Security
 
-See the [Security Policy](SECURITY.md) for supported versions, vulnerability reporting, and disclosure practices.
+Report security vulnerabilities per the [Security Policy](SECURITY.md).
 
 ## 🏗️ Architecture
 

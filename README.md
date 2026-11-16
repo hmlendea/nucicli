@@ -1,5 +1,6 @@
 [![Latest Release](https://img.shields.io/github/v/release/hmlendea/nucicli)](https://github.com/hmlendea/nucicli/releases/latest)
 [![Build Status](https://github.com/hmlendea/nucicli/actions/workflows/dotnet.yml/badge.svg)](https://github.com/hmlendea/nucicli/actions/workflows/dotnet.yml)
+[![Security Scan](https://github.com/hmlendea/nucicli/actions/workflows/security.yml/badge.svg)](https://github.com/hmlendea/nucicli/actions/workflows/security.yml)
 [![NuGet](https://img.shields.io/nuget/v/NuciCLI)](https://nuget.org/packages/NuciCLI)
 [![License](https://img.shields.io/github/license/hmlendea/nucicli)](https://github.com/hmlendea/nucicli/blob/master/LICENSE)
 
@@ -34,6 +35,7 @@ NuciCLI is a lightweight .NET library for building interactive command-line appl
 - [Related Projects](#related-projects)
 - [Privacy and Data](#privacy-and-data)
 - [Security](#security)
+- [Support](#support)
 - [Project Engagement](#project-engagement)
 - [License](#license)
 
@@ -124,6 +126,7 @@ The `.NET` workflow restores dependencies, builds the solution, and runs tests o
 | [.NET](https://github.com/hmlendea/nucicli/blob/master/.github/workflows/dotnet.yml) | Continuous validation | Restores dependencies, builds the solution, and runs tests. |
 | [GitHub Release](https://github.com/hmlendea/nucicli/blob/master/.github/workflows/github-release.yml) | GitHub package release | Packs the project, calculates a SHA256 checksum, and uploads the package to the GitHub Release. |
 | [NuGet.org Release](https://github.com/hmlendea/nucicli/blob/master/.github/workflows/nuget-release.yml) | NuGet publication | Packs the project and publishes it to NuGet.org using OIDC authentication. |
+| [Security](https://github.com/hmlendea/nucicli/blob/master/.github/workflows/security.yml) | Security scanning | Checks for vulnerable packages and runs CodeQL analysis on pushes, pull requests, and a weekly schedule. |
 
 ## 🗂️ Project Structure
 
@@ -210,9 +213,13 @@ NuciCLI processes only the console input and output explicitly provided by the c
 
 ## 🔒 Security
 
-NuciCLI follows the security practices documented in [SECURITY.md](./SECURITY.md).
+NuciCLI keeps console interaction limited to the input and output explicitly requested by the calling application.
 
-For information on reporting security vulnerabilities, see [SECURITY.md](./SECURITY.md).
+For information on reporting security vulnerabilities, see the [Security Policy](./SECURITY.md).
+
+## 💬 Support
+
+For support, please [open an issue](https://github.com/hmlendea/nucicli/issues).
 
 ## 💝 Project Engagement
 

@@ -8,6 +8,7 @@ This document describes the security policy for NuciCLI, including supported ver
 - [Reporting a Vulnerability](#-reporting-a-vulnerability)
 - [Scope](#-scope)
 - [Disclosure Policy](#-disclosure-policy)
+- [Automated Security Scanning](#-automated-security-scanning)
 - [Safe Harbour](#-safe-harbour)
 - [Recognition](#-recognition)
 
@@ -48,6 +49,14 @@ This project follows coordinated disclosure:
 2. A remediation plan is prepared and validated.
 3. Public disclosure is published after a fix, mitigation, or agreed risk decision is available.
 4. Credit is attributed in accordance with reporter preference and project policy.
+
+## 🔍 Automated Security Scanning
+
+This repository runs automated security scans on every push and pull request targeting `master`, and weekly on a schedule. The scan includes:
+- **Vulnerable package detection** using `dotnet list package --vulnerable --include-transitive` across runtime and transitive dependencies.
+- **CodeQL static analysis** for C# source code, covering the library and test projects.
+
+Results are published to the [Security](https://github.com/hmlendea/nucicli/security) tab and the [Actions](https://github.com/hmlendea/nucicli/actions/workflows/security.yml) workflow page.
 
 ## 🧾 Safe Harbour
 
