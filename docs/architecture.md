@@ -195,7 +195,7 @@ Write(text, fg, bg)
 ## Compatibility Contracts
 
 - **Target Framework**: net10.0
-- **NuGet Package**: `NuciCLI` v3.0.2
+- **NuGet Package**: `NuciCLI` v3.0.4
 - **Dependencies**: `NuciExtensions` 6.0.2
 - **License**: GPL-3.0-or-later
 - **Breaking Changes**: Version 3.x — static façade API stable since v1

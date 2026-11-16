@@ -76,7 +76,7 @@ ReadPermission(string prompt, bool defaultValue, NuciConsoleColour fg, NuciConso
 ```
 
 **Behaviour**:
-1. Constructs prompt suffix: `" (Y/n)"` if default=false, `" (y/N)"` if default=true
+1. Constructs prompt suffix: `" (Y/n)"` if default=true, `" (y/N)"` if default=false
 2. Calls `ReadKey(fullPrompt, fg, bg)` in loop
 3. Switch on key:
    - **Y**: `WriteLine()`, return `true`
@@ -172,7 +172,7 @@ No custom exceptions except `InputCancellationException`.
 
 ### Performance Characteristics
 
-- **Allocations**: Minimal. `NuciConsoleColour` static instances reused. String concatenation in `ReadLine` loop (one per char).
+- **Allocations**: Minimal. `NuciConsoleColour` static instances reused. `ReadLine` accumulates input in a `StringBuilder`.
 - **Syscalls**: Each `Console.Write`/`ReadKey` crosses managed/unmanaged boundary.
 - **Colour Save/Restore**: 4 property accesses per `Write` call.
 

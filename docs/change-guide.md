@@ -44,36 +44,23 @@ public static void NewOperation(string param, NuciConsoleColour fg) => NewOperat
 ### Current Pattern
 
 ```csharp
-ConsoleColor oldFg = Console.ForegroundColor;
-ConsoleColor oldBg = Console.BackgroundColor;
-Console.ResetColor();
-if (fg.ConsoleColour != null) Console.ForegroundColor = fg.ConsoleColour.Value;
-if (bg.ConsoleColour != null) Console.BackgroundColor = bg.ConsoleColour.Value;
-Console.Write(text);
-Console.ForegroundColor = oldFg;
-Console.BackgroundColor = oldBg;
-```
-
-### Required Fix: Exception Safety
-
-```csharp
-ConsoleColor oldFg = Console.ForegroundColor;
-ConsoleColor oldBg = Console.BackgroundColor;
+ConsoleColor previousForegroundColour = Console.ForegroundColor;
+ConsoleColor previousBackgroundColour = Console.BackgroundColor;
 try
 {
     Console.ResetColor();
-    if (fg.ConsoleColour != null) Console.ForegroundColor = fg.ConsoleColour.Value;
-    if (bg.ConsoleColour != null) Console.BackgroundColor = bg.ConsoleColour.Value;
+    if (fg.ConsoleColour is ConsoleColor foreground) Console.ForegroundColor = foreground;
+    if (bg.ConsoleColour is ConsoleColor background) Console.BackgroundColor = background;
     Console.Write(text);
 }
 finally
 {
-    Console.ForegroundColor = oldFg;
-    Console.BackgroundColor = oldBg;
+    Console.ForegroundColor = previousForegroundColour;
+    Console.BackgroundColor = previousBackgroundColour;
 }
 ```
 
-**Apply to ALL Write overloads** (Write, WriteLine, WriteLines).
+**All** colour-changing output overloads delegate to this single implementation.
 
 ## Adding a New Colour
 

@@ -74,10 +74,8 @@ Return
 ### Exception Safety
 
 If `Console.Write` throws (e.g., `IOException`):
-- `oldFg`/`oldBg` still restored (no `finally` but sequential)
-- **Risk**: If `Console.Write` throws before restore, colours left changed
-- **Actual code**: Restore after `Write` — not in `finally`
-- **Fix needed**: Wrap in `try/finally` for true exception safety
+- `previousForegroundColour`/`previousBackgroundColour` are restored in a `finally` block
+- **Guarantee**: Colours are restored even when the write fails
 
 ### WriteLine(text, fg, bg)
 
@@ -217,35 +215,25 @@ Loop:
 
 ### Colour Restoration Guarantee
 
-**Current Implementation**: Sequential restore after `Console.Write`.
+**Current Implementation**: Restoration inside a `finally` block.
 
 ```csharp
-ConsoleColor oldFg = Console.ForegroundColor;
-ConsoleColor oldBg = Console.BackgroundColor;
-Console.ResetColor();
-// ... set new colours ...
-Console.Write(text);
-Console.ForegroundColor = oldFg;  // ← Not in finally!
-Console.BackgroundColor = oldBg;
-```
-
-**Gap**: If `Console.Write` throws, colours not restored.
-
-**Recommended Fix**:
-```csharp
-try {
-    ConsoleColor oldFg = Console.ForegroundColor;
-    ConsoleColor oldBg = Console.BackgroundColor;
+ConsoleColor previousForegroundColour = Console.ForegroundColor;
+ConsoleColor previousBackgroundColour = Console.BackgroundColor;
+try
+{
     Console.ResetColor();
-    if (fg.ConsoleColour != null) Console.ForegroundColor = fg.ConsoleColour.Value;
-    if (bg.ConsoleColour != null) Console.BackgroundColor = bg.ConsoleColour.Value;
+    // ... set new colours ...
     Console.Write(text);
 }
-finally {
-    Console.ForegroundColor = oldFg;
-    Console.BackgroundColor = oldBg;
+finally
+{
+    Console.ForegroundColor = previousForegroundColour;
+    Console.BackgroundColor = previousBackgroundColour;
 }
 ```
+
+**Guarantee**: Colours are restored even when `Console.Write` throws.
 
 ## Cursor Rendering
 
