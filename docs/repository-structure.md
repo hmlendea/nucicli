@@ -7,6 +7,7 @@ nucicli/
 ├── .github/
 │   └── workflows/
 │       ├── dotnet.yml           # CI: build, test on push/PR
+│       ├── security.yml         # Security: vulnerable packages, CodeQL
 │       ├── nuget-release.yml    # CD: publish to NuGet.org on release
 │       └── github-release.yml   # CD: upload package to GitHub Release
 ├── NuciCLI/                     # Main library project
@@ -92,6 +93,7 @@ NuciCLI.UnitTests/obj/
 | `.github/workflows/dotnet.yml` | push/PR to master | checkout, setup .NET 10, restore, build, test |
 | `.github/workflows/nuget-release.yml` | release published | checkout, setup .NET 10, extract version, restore, pack, NuGet OIDC login, push to nuget.org |
 | `.github/workflows/github-release.yml` | release published | checkout, setup .NET 10, extract version, restore, pack, calculate SHA256, upload to GitHub Release, append checksum to release notes |
+| `.github/workflows/security.yml` | push/PR to master, weekly schedule | checkout, setup .NET 10, restore, list vulnerable packages, CodeQL init/build/analyze |
 
 ## Documentation Files (Root)
 

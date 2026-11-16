@@ -32,7 +32,22 @@ dotnet test --no-build --verbosity normal
      - Build: `dotnet build --no-restore`
      - Test: `dotnet test --no-build --verbosity normal`
 
-**No code coverage, linting, or static analysis steps currently configured.**
+**No code coverage or linting steps currently configured.**
+
+### Security Scan (`.github/workflows/security.yml`)
+
+**Triggers**: Push to master, Pull requests to master, weekly schedule (`0 0 * * 0`)
+
+**Permissions**: `security-events: write`, `contents: read`
+
+**Steps**:
+1. Checkout
+2. Setup .NET 10.x
+3. Restore: `dotnet restore`
+4. Vulnerable package check: `dotnet list package --vulnerable --include-transitive`
+5. CodeQL initialisation for `csharp`
+6. Build: `dotnet build --no-restore`
+7. CodeQL analysis with SARIF upload to GitHub Code Scanning
 
 ## Release Pipeline
 
