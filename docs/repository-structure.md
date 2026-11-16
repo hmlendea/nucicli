@@ -50,7 +50,7 @@ nucicli/
 
 | File | Lines | Responsibility |
 |------|-------|----------------|
-| `NuciConsole.cs` | ~300 | All public console operations, private `PerformKeyRead` |
+| `NuciConsole.cs` | ~460 | All public console operations, private `PerformKeyRead` |
 | `NuciConsoleColour.cs` | ~60 | 17 static colour instances, value object |
 | `InputCancellationException.cs` | ~30 | Exception type with 3 constructors |
 | `NuciCLI.csproj` | ~25 | net10.0, NuciExtensions 6.0.2, package metadata |

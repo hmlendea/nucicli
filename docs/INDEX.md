@@ -73,4 +73,4 @@ NuciCLI is a lightweight .NET library for building interactive command-line appl
 
 - **Last reviewed**: 2026-11-03
 - **Owner**: Horațiu Mlendea
-- **Coverage status**: Complete for current codebase (v3.0.2)
+- **Coverage status**: Complete for current codebase (v3.0.4)

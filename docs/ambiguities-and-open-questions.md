@@ -25,10 +25,8 @@
 - Should `Width`/`Height` be cached or always read from BCL?
 
 ### 4. Colour Restoration Exception Safety
-**Status**: Gap identified
-**Issue**: `Write(text, fg, bg)` restores colours sequentially, not in `finally`.
-**Risk**: If `Console.Write` throws, colours left modified.
-**Fix**: Wrap in `try/finally`.
+**Status**: Resolved
+**Fix**: `Write(text, fg, bg)` restores the previous colours in a `finally` block, so a failing write cannot leave colours modified.
 
 ### 5. Thread Safety Documentation
 **Status**: Documented as not thread-safe
@@ -75,29 +73,21 @@
 ## Technical Debt
 
 ### 1. String Concatenation in ReadLine Loop
-```csharp
-inputValue += key.KeyChar;  // Allocates new string per char
-```
-**Impact**: O(n²) allocations for n-character input.
-**Fix**: Use `StringBuilder` or `List<char>`.
+**Status**: Resolved
+**Fix**: `ReadLine` accumulates characters in a `StringBuilder` instead of reallocating the input string per character.
 
 ### 2. No XML Documentation on Private Members
 **Impact**: Internal maintenance harder.
 **Fix**: Add `/// <summary>` to `PerformKeyRead`.
 
 ### 3. Magic Numbers in Colour Mapping
-```csharp
-if (Value.Equals(-1))  // Default sentinel
-```
-**Impact**: -1 meaning not self-documenting.
-**Fix**: `const int DefaultValue = -1;`
+**Status**: Resolved
+**Fix**: The `Default` sentinel is documented on `NuciConsoleColour.Value` and `NuciConsoleColour.Default`.
 
 ### 4. Parameter Name Typo
-```csharp
-/// <param name="proxmpt">  // Should be "prompt"
-```
+**Status**: Resolved
 **File**: `NuciConsole.cs`, `ReadLine(string, NuciConsoleColour, NuciConsoleColour)`
-**Fix**: Correct XML comment.
+**Fix**: XML comments use the correct `prompt` parameter name.
 
 ## Future Considerations
 
@@ -132,7 +122,7 @@ if (Value.Equals(-1))  // Default sentinel
 |----------|---------------|----------------|
 | Multi-target frameworks? | net10.0 only | Add net8.0, net9.0 |
 | Test visibility? | Unknown | Verify test project contents |
-| Colour restoration fix? | Not in `finally` | Apply `try/finally` |
+| Colour restoration fix? | Resolved | Restored in `finally` |
 | Escape in ReadPermission? | Ignored | Add cancellation support |
 | NuciExtensions necessity? | Unverified | Audit usage or remove |
 | Thread safety aids? | None | Document clearly, no primitives |

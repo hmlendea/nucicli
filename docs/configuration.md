@@ -65,7 +65,7 @@ Only project-level settings in `NuciCLI.csproj`:
 
 ```xml
 <TargetFramework>net10.0</TargetFramework>
-<Version>3.0.2</Version>
+<Version>3.0.4</Version>
 <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
 ```
 

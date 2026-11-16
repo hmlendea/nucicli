@@ -374,7 +374,7 @@ Reads confirmation with all options.
 **Exceptions**: `IOException` — No console available.
 
 **Behaviour Details**:
-1. Constructs suffix: `" (Y/n)"` if default=false, `" (y/N)"` if default=true
+1. Constructs suffix: `" (Y/n)"` if default=true, `" (y/N)"` if default=false
 2. Loops: `ReadKey(fullPrompt, fg, bg)`
 3. **Y**: `WriteLine()`, return `true`
 4. **N**: `WriteLine()`, return `false`
@@ -433,17 +433,23 @@ Writes text with foreground and background colours.
 
 **Implementation**:
 ```csharp
-ConsoleColor oldFg = Console.ForegroundColor;
-ConsoleColor oldBg = Console.BackgroundColor;
-Console.ResetColor();
-if (foregroundColour.ConsoleColour != null) Console.ForegroundColor = foregroundColour.ConsoleColour.Value;
-if (backgroundColour.ConsoleColour != null) Console.BackgroundColor = backgroundColour.ConsoleColour.Value;
-Console.Write(text);
-Console.ForegroundColor = oldFg;
-Console.BackgroundColor = oldBg;
+ConsoleColor previousForegroundColour = Console.ForegroundColor;
+ConsoleColor previousBackgroundColour = Console.BackgroundColor;
+try
+{
+    Console.ResetColor();
+    if (foregroundColour.ConsoleColour is ConsoleColor foreground) Console.ForegroundColor = foreground;
+    if (backgroundColour.ConsoleColour is ConsoleColor background) Console.BackgroundColor = background;
+    Console.Write(text);
+}
+finally
+{
+    Console.ForegroundColor = previousForegroundColour;
+    Console.BackgroundColor = previousBackgroundColour;
+}
 ```
 
-**Note**: Colours restored sequentially (not in `finally`). If `Console.Write` throws, colours may not restore.
+**Note**: Colours are restored in a `finally` block, so they are restored even when `Console.Write` throws.
 
 ---
 
@@ -583,11 +589,16 @@ private static ConsoleKeyInfo PerformKeyRead()
 ```csharp
 private static ConsoleKeyInfo PerformKeyRead(bool intercept)
 {
-    bool previousCtrlCBehaviour = Console.TreatControlCAsInput;
+    bool wasControlCTreatedAsInput = Console.TreatControlCAsInput;
     Console.TreatControlCAsInput = true;
-    ConsoleKeyInfo inputValue = Console.ReadKey(intercept);
-    Console.TreatControlCAsInput = previousCtrlCBehaviour;
-    return inputValue;
+try
+    {
+        return Console.ReadKey(intercept);
+    }
+    finally
+    {
+        Console.TreatControlCAsInput = wasControlCTreatedAsInput;
+    }
 }
 ```
 

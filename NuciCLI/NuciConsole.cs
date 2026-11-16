@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace NuciCLI
 {
@@ -9,7 +11,7 @@ namespace NuciCLI
     public static class NuciConsole
     {
         /// <summary>
-        /// Gets or sets the cursor position in the console.
+        /// Gets or sets the horizontal cursor position in the console.
         /// </summary>
         public static int CursorX
         {
@@ -18,7 +20,7 @@ namespace NuciCLI
         }
 
         /// <summary>
-        /// Gets or sets the cursor position in the console.
+        /// Gets or sets the vertical cursor position in the console.
         /// </summary>
         public static int CursorY
         {
@@ -45,6 +47,10 @@ namespace NuciCLI
         /// Gets the area of the console buffer (Width * Height).
         /// </summary>
         public static int Area => Width * Height;
+
+        private static string NoDefaultOptions => "y/N";
+
+        private static string YesDefaultOptions => "Y/n";
 
         /// <summary>
         /// Reads a key from the standard input without displaying it on the console.
@@ -75,9 +81,12 @@ namespace NuciCLI
         /// <param name="foregroundColour">The text colour.</param>
         /// <param name="backgroundColour">The background colour.</param>
         /// <returns>The key information of the pressed key.</returns>
-        public static ConsoleKeyInfo ReadKey(string prompt, NuciConsoleColour foregroundColour, NuciConsoleColour backgroundColour)
+        public static ConsoleKeyInfo ReadKey(
+            string prompt,
+            NuciConsoleColour foregroundColour,
+            NuciConsoleColour backgroundColour)
         {
-            Write(prompt);
+            Write(prompt, foregroundColour, backgroundColour);
 
             return PerformKeyRead();
         }
@@ -114,7 +123,10 @@ namespace NuciCLI
         /// <param name="backgroundColour">The background colour for the prompt.</param>
         /// <returns>The input string entered by the user.</returns>
         /// <exception cref="InputCancellationException">Thrown when the user cancels input by pressing Escape.</exception>
-        public static string ReadLine(string prompt, NuciConsoleColour foregroundColour, NuciConsoleColour backgroundColour)
+        public static string ReadLine(
+            string prompt,
+            NuciConsoleColour foregroundColour,
+            NuciConsoleColour backgroundColour)
         {
             Write(prompt, foregroundColour, backgroundColour);
 
@@ -154,8 +166,15 @@ namespace NuciCLI
         /// <param name="defaultValue">The default value to return if the user presses Enter without making a choice.</param>
         /// <param name="foregroundColour">The text colour for the prompt.</param>
         /// <returns>True if the user confirms the action, false if they deny it.</returns>
-        public static bool ReadPermission(string prompt, bool defaultValue, NuciConsoleColour foregroundColour)
-            => ReadPermission(prompt, defaultValue, foregroundColour, NuciConsoleColour.Default);
+        public static bool ReadPermission(
+            string prompt,
+            bool defaultValue,
+            NuciConsoleColour foregroundColour)
+            => ReadPermission(
+                prompt,
+                defaultValue,
+                foregroundColour,
+                NuciConsoleColour.Default);
 
         /// <summary>
         /// Reads a permission from the user with a prompt, allowing them to confirm or deny the action, with specified foreground and background colours.
@@ -164,7 +183,10 @@ namespace NuciCLI
         /// <param name="foregroundColour">The text colour for the prompt.</param>
         /// <param name="backgroundColour">The background colour for the prompt.</param>
         /// <returns>True if the user confirms the action, false if they deny it.</returns>
-        public static bool ReadPermission(string prompt, NuciConsoleColour foregroundColour, NuciConsoleColour backgroundColour)
+        public static bool ReadPermission(
+            string prompt,
+            NuciConsoleColour foregroundColour,
+            NuciConsoleColour backgroundColour)
             => ReadPermission(prompt, false, foregroundColour, backgroundColour);
 
         /// <summary>
@@ -181,16 +203,19 @@ namespace NuciCLI
             NuciConsoleColour foregroundColour,
             NuciConsoleColour backgroundColour)
         {
+            string options = NoDefaultOptions;
+
+            if (defaultValue)
+            {
+                options = YesDefaultOptions;
+            }
+
             while (true)
             {
-                string yesNo = "y/N";
-
-                if (defaultValue)
-                {
-                    yesNo = "Y/n";
-                }
-
-                ConsoleKeyInfo inputValue = ReadKey($"{prompt} ({yesNo}) ");
+                ConsoleKeyInfo inputValue = ReadKey(
+                    $"{prompt} ({options}) ",
+                    foregroundColour,
+                    backgroundColour);
 
                 switch (inputValue.Key)
                 {
@@ -217,8 +242,11 @@ namespace NuciCLI
         /// Writes multiple lines to the standard output.
         /// </summary>
         /// <param name="lines">The lines.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="lines"/> is null.</exception>
         public static void WriteLines(IEnumerable<string> lines)
         {
+            ArgumentNullException.ThrowIfNull(lines);
+
             foreach (string line in lines)
             {
                 WriteLine(line);
@@ -230,8 +258,13 @@ namespace NuciCLI
         /// </summary>
         /// <param name="lines">The lines.</param>
         /// <param name="foregroundColour">The text colour for all lines.</param>
-        public static void WriteLines(IEnumerable<string> lines, NuciConsoleColour foregroundColour)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="lines"/> is null.</exception>
+        public static void WriteLines(
+            IEnumerable<string> lines,
+            NuciConsoleColour foregroundColour)
         {
+            ArgumentNullException.ThrowIfNull(lines);
+
             foreach (string line in lines)
             {
                 WriteLine(line, foregroundColour);
@@ -244,8 +277,14 @@ namespace NuciCLI
         /// <param name="lines">The lines.</param>
         /// <param name="foregroundColour">The text colour for all lines.</param>
         /// <param name="backgroundColour">The background colour for all lines.</param>
-        public static void WriteLines(IEnumerable<string> lines, NuciConsoleColour foregroundColour, NuciConsoleColour backgroundColour)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="lines"/> is null.</exception>
+        public static void WriteLines(
+            IEnumerable<string> lines,
+            NuciConsoleColour foregroundColour,
+            NuciConsoleColour backgroundColour)
         {
+            ArgumentNullException.ThrowIfNull(lines);
+
             foreach (string line in lines)
             {
                 WriteLine(line, foregroundColour, backgroundColour);
@@ -259,7 +298,7 @@ namespace NuciCLI
             => WriteLine(string.Empty);
 
         /// <summary>
-        /// Writes a coloured line to the standard output.
+        /// Writes a line to the standard output.
         /// </summary>
         /// <param name="text">Text.</param>
         public static void WriteLine(string text)
@@ -279,7 +318,10 @@ namespace NuciCLI
         /// <param name="text">Text.</param>
         /// <param name="foregroundColour">The text colour.</param>
         /// <param name="backgroundColour">The background colour.</param>
-        public static void WriteLine(string text, NuciConsoleColour foregroundColour, NuciConsoleColour backgroundColour)
+        public static void WriteLine(
+            string text,
+            NuciConsoleColour foregroundColour,
+            NuciConsoleColour backgroundColour)
             => Write(text + Environment.NewLine, foregroundColour, backgroundColour);
 
         /// <summary>
@@ -303,53 +345,69 @@ namespace NuciCLI
         /// <param name="text">Text.</param>
         /// <param name="foregroundColour">The text colour.</param>
         /// <param name="backgroundColour">The background colour.</param>
-        public static void Write(string text, NuciConsoleColour foregroundColour, NuciConsoleColour backgroundColour)
+        public static void Write(
+            string text,
+            NuciConsoleColour foregroundColour,
+            NuciConsoleColour backgroundColour)
         {
-            ConsoleColor oldForegroundColour = Console.ForegroundColor;
-            ConsoleColor oldBackgroundColour = Console.BackgroundColor;
+            ConsoleColor previousForegroundColour = Console.ForegroundColor;
+            ConsoleColor previousBackgroundColour = Console.BackgroundColor;
 
+            try
+            {
+                ApplyColours(foregroundColour, backgroundColour);
+                Console.Write(text);
+            }
+            finally
+            {
+                Console.ForegroundColor = previousForegroundColour;
+                Console.BackgroundColor = previousBackgroundColour;
+            }
+        }
+
+        private static void ApplyColours(
+            NuciConsoleColour foregroundColour,
+            NuciConsoleColour backgroundColour)
+        {
             Console.ResetColor();
 
-            if (foregroundColour.ConsoleColour is not null)
+            if (foregroundColour is not null &&
+                foregroundColour.ConsoleColour is ConsoleColor foreground)
             {
-                Console.ForegroundColor = foregroundColour.ConsoleColour.Value;
+                Console.ForegroundColor = foreground;
             }
 
-            if (backgroundColour.ConsoleColour is not null)
+            if (backgroundColour is not null &&
+                backgroundColour.ConsoleColour is ConsoleColor background)
             {
-                Console.BackgroundColor = backgroundColour.ConsoleColour.Value;
-            }
-
-            Console.Write(text, foregroundColour, backgroundColour);
-
-            Console.ForegroundColor = oldForegroundColour;
-            Console.BackgroundColor = oldBackgroundColour;
-        }
+                Console.BackgroundColor = background;
+            }        }
 
         private static string ReadInputLine()
         {
-            string inputValue = string.Empty;
+            StringBuilder inputValue = new();
 
             while (true)
             {
                 ConsoleKeyInfo key = PerformKeyRead(true);
 
-                if (Equals(key.Key, ConsoleKey.Escape))
+                if (key.Key is ConsoleKey.Escape)
                 {
-                    CancelInput(inputValue);
+                    CancelInput(inputValue.ToString());
                 }
 
-                if (Equals(key.Key, ConsoleKey.Enter))
+                if (key.Key is ConsoleKey.Enter)
                 {
                     WriteLine();
 
-                    return inputValue;
+                    return inputValue.ToString();
                 }
 
-                inputValue = ProcessInputKey(inputValue, key);
+                ProcessInputKey(inputValue, key);
             }
         }
 
+        [DoesNotReturn]
         private static void CancelInput(string inputValue)
         {
             CursorX -= inputValue.Length;
@@ -358,32 +416,32 @@ namespace NuciCLI
             throw new InputCancellationException();
         }
 
-        private static string ProcessInputKey(string inputValue, ConsoleKeyInfo key)
+        private static void ProcessInputKey(StringBuilder inputValue, ConsoleKeyInfo key)
         {
-            if (Equals(key.Key, ConsoleKey.Backspace) && !string.IsNullOrEmpty(inputValue))
+            if (key.Key is ConsoleKey.Backspace && inputValue.Length > 0)
             {
                 CursorX -= 1;
                 Write(" ");
                 CursorX -= 1;
 
-                return inputValue[..^1];
+                inputValue.Length -= 1;
+
+                return;
             }
 
             if (IsInputCharacter(key.KeyChar))
             {
                 Console.Write(key.KeyChar);
 
-                return inputValue + key.KeyChar;
+                inputValue.Append(key.KeyChar);
             }
-
-            return inputValue;
         }
 
-        private static bool IsInputCharacter(char character) =>
-            char.IsLetterOrDigit(character) ||
-            char.IsSymbol(character) ||
-            char.IsPunctuation(character) ||
-            char.IsWhiteSpace(character);
+        private static bool IsInputCharacter(char character)
+            => char.IsLetterOrDigit(character) ||
+                char.IsSymbol(character) ||
+                char.IsPunctuation(character) ||
+                char.IsWhiteSpace(character);
 
         private static ConsoleKeyInfo PerformKeyRead()
             => PerformKeyRead(false);
@@ -393,11 +451,14 @@ namespace NuciCLI
             bool wasControlCTreatedAsInput = Console.TreatControlCAsInput;
             Console.TreatControlCAsInput = true;
 
-            ConsoleKeyInfo inputValue = Console.ReadKey(intercept);
-
-            Console.TreatControlCAsInput = wasControlCTreatedAsInput;
-
-            return inputValue;
+            try
+            {
+                return Console.ReadKey(intercept);
+            }
+            finally
+            {
+                Console.TreatControlCAsInput = wasControlCTreatedAsInput;
+            }
         }
     }
 }

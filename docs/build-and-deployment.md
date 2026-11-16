@@ -66,7 +66,7 @@ dotnet test --no-build --verbosity normal
 6. NuGet OIDC login (NuGet/login@v1)
 7. Push: `dotnet nuget push ... --source https://api.nuget.org/v3/index.json --skip-duplicate`
 
-**Version Strategy**: Git tag → package version (e.g., tag `v3.0.2` → package `3.0.2`)
+**Version Strategy**: Git tag → package version (e.g., tag `v3.0.4` → package `3.0.4`)
 
 ### GitHub Release (`.github/workflows/github-release.yml`)
 
@@ -92,7 +92,7 @@ dotnet test --no-build --verbosity normal
 <PropertyGroup>
   <TargetFramework>net10.0</TargetFramework>
   <RootNamespace>NuciCLI</RootNamespace>
-  <Version>3.0.2</Version>
+  <Version>3.0.4</Version>
   <Description>Lightweight library for building interactive command-line applications.</Description>
   <Authors>Horațiu Mlendea</Authors>
   <Copyright>Copyright 2026 © Horațiu Mlendea</Copyright>
@@ -132,7 +132,7 @@ dotnet test --no-build --verbosity normal
 
 - **Scheme**: Semantic Versioning (Major.Minor.Patch)
 - **Source**: Git tag (`v<version>`)
-- **Current**: 3.0.2
+- **Current**: 3.0.4
 - **Assembly Version**: Derived from `<Version>` in csproj
 - **File Version**: Same
 
@@ -178,8 +178,8 @@ git push origin feature/xyz
 # 6. Merge to master → triggers CI
 
 # 7. Create release (when ready)
-git tag v3.0.3
-git push origin v3.0.3
+git tag v3.0.4
+git push origin v3.0.4
 # → GitHub Actions publishes to NuGet.org and GitHub Releases
 ```
 

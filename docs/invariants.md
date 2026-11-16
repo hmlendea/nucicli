@@ -19,7 +19,7 @@ finally { Console.ForegroundColor = origFg; Console.BackgroundColor = origBg; }
 
 **Exception**: If `IOException` occurs during write, restoration still executes (finally block).
 
-**Gap**: Current implementation uses `try/finally` but not verified in all overloads — see [ambiguities](../ambiguities-and-open-questions.md#1-colour-restoration-not-exception-safe).
+**Gap**: None. Colour-changing `Write` overloads restore the previous colours in a `finally` block.
 
 ### I3: Ctrl+C Handling
 **`ReadKey` and `ReadLine` intercept Ctrl+C and return it as a key, not throwing `ConsoleCancelEventArgs`.**

@@ -49,7 +49,7 @@ namespace NuciCLI
             Value = value;
             Name = name;
 
-            if (Value.Equals(-1))
+            if (value is -1)
             {
                 ConsoleColour = null;
             }

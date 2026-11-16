@@ -125,7 +125,7 @@ NuciCLI itself holds **no instance state** — all state is in `System.Console`.
 
 ## Version & Distribution
 
-- **Current Version**: 3.0.2
+- **Current Version**: 3.0.4
 - **Target Framework**: net10.0
 - **NuGet Package**: `NuciCLI`
 - **License**: GPL-3.0-or-later
